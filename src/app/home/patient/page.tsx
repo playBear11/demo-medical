@@ -204,7 +204,7 @@ const Patient = () => {
 
 
   return (
-    <div>
+    <div className=" h-screen bg-white flex flex-col overflow-hidden">
       {/* ส่วนของ Navigation */}
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 

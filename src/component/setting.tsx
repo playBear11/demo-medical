@@ -1,8 +1,9 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AccountCircleOutlined,
   EmailOutlined,
+  Label,
   LockOutlined,
 } from "@mui/icons-material";
 import {
@@ -15,80 +16,118 @@ import {
   VolumeUpOutlined,
   DoNotDisturbOutlined,
 } from "@mui/icons-material";
+import { Monitor, Moon, Sun } from "lucide-react";
+import { Button, RadioGroup } from "@mui/material";
+import { number } from "yup";
 
 const ProfileSetting = () => {
-  // กำหนด state สำหรับชื่อผู้ใช้และรูปโปรไฟล์
-  const [username, setUsername] = useState("user123");
+  const [name, setName] = useState("user123");
+  const [lastname, setLastName] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [tel, setTel] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
-  // ฟังก์ชันสำหรับจัดการเมื่อเลือกไฟล์รูปภาพใหม่
-  const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
+  const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      const file = files[0]; // ดึงไฟล์จาก input
-      setProfileImage(URL.createObjectURL(file)); // เปลี่ยน URL ของไฟล์
+      const file = files[0];
+      setProfileImage(URL.createObjectURL(file));
     }
   };
 
-  // ฟังก์ชันสำหรับลบรูปโปรไฟล์
   const handleImageRemove = () => {
-    setProfileImage(null); // ตั้งค่าเป็น null เพื่อลบรูป
-  };
-
-  // ฟังก์ชันสำหรับจัดการเมื่อเปลี่ยนชื่อผู้ใช้
-  const handleUsernameChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setUsername(event.target.value); // อัปเดตชื่อผู้ใช้
+    setProfileImage(null);
   };
 
   return (
-    <div>
-      {/* ส่วนจัดการรูปโปรไฟล์ */}
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold mt-5 mb-5">Profile Picture</h3>
-
-        {/* หากมีรูปโปรไฟล์จะแสดงภาพและปุ่มลบ */}
-        {profileImage ? (
-          <div className="flex justify-between items-center">
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="w-24 h-24 rounded-full mb-4"
-            />
-
+    <div className="overflow-y-scroll">
+      <h2 className="text-sm font-semibold text-start mb-6">Edit Profile</h2>
+      <hr className="my-2 border-gray-200"/>
+      
+      <div className="flex flex-col items-center mb-6">
+        
+          <div className="relative">
+            <img 
+            src={profileImage || "https://via.placeholder.com/96?text=No+Image"}
+            alt="Profile" 
+            className="w-24 h-24 rounded-full shadow-md mt-5" />
+            {profileImage && (
             <button
-              onClick={handleImageRemove} // เมื่อคลิกปุ่มลบ จะเรียกฟังก์ชันนี้
-              className="bg-red-500 text-white px-4 py-2 rounded"
+              onClick={handleImageRemove}
+              className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full "
             >
-              Remove Picture
+              ✕
             </button>
+            )}
           </div>
-        ) : (
-          // หากยังไม่มีรูปโปรไฟล์ แสดง input ให้เลือกไฟล์
-          <div>
-            <input
-              type="file"
-              onChange={handleImageChange} // เมื่อเลือกไฟล์ใหม่ จะเรียกฟังก์ชันนี้
-              className="mb-4 justify-center"
-            />
-          </div>
-        )}
+       
+          <label className="cursor-pointer bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 mt-5">
+            Upload Picture
+            <input type="file" onChange={handleImageChange} className="hidden" />
+          </label>
+      </div>
+      <hr className="my-2 border-gray-200 mb-5" />
+      
+      <div className="space-y-4 ">
+        <div className=" flex justify-between items-center ">
+        
+          <label className="block font-medium">Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="border w-60 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 -ml-20"
+          />
+        
+          <label className="block font-medium">Last Name</label>
+          <input
+            type="text"
+            value={lastname}
+            onChange={(e) => setLastName(e.target.value)}
+            className="border w-60 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 -ml-20"
+          />
+       
+        </div>
 
-        {/* อินพุตสำหรับเปลี่ยนชื่อผู้ใช้ */}
-        <label className="block mb-2 mt-6 font-semibold">Username</label>
-        <input
-          type="text"
-          value={username} // แสดงชื่อผู้ใช้ที่เก็บใน state
-          onChange={handleUsernameChange} // เมื่อมีการเปลี่ยนชื่อจะเรียกฟังก์ชันนี้
-          className="border p-2 mb-4 w-full"
-        />
+
+        <div className=" flex justify-between items-center ">
+          <label className="block font-medium">Age</label>
+          <input
+            type="number"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            className="border w-60 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 -ml-20"
+          />
+        
+          <label className="block font-medium">Gender</label>
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            className="border w-60 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 -ml-20"
+          >
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div  className=" flex items-center ">
+          <label className=" block font-medium">Tel</label>
+          <input 
+          type="Telephone"
+          value={tel}
+          onChange={(e) => setTel(e.target.value)}
+          className="border  w-60 p-2 rounded-lg focus:ring-2 focus:ring-blue-500 ml-14"
+          />
+        </div>
       </div>
     </div>
   );
 };
+
+
 
 const AccountSettings = () => {
   return (
@@ -208,61 +247,89 @@ const LanguageSettings = () => {
   );
 };
 
+
+
+const listTheme = [
+  {
+    id: "light",
+    label: "System (White Theme)",
+    image: "https://shorturl.asia/LaOQ1", // ใช้ไอคอนรูปภาพแทน
+    borderColor: "border-blue-500",
+  },
+  {
+    id: "dark",
+    label: "System (Dark Theme)",
+    image: "https://shorturl.asia/Q9U41",
+    borderColor: "border-gray-500",
+  },
+  {
+    id: "cosmic",
+    label: "Cosmic Soft Blue",
+    image: "https://shorturl.asia/Iqvcw",
+    borderColor: "border-blue-300",
+  },
+];
+
 const ThemeSettings = () => {
-  // ใช้ useState เพื่อเก็บสถานะของธีม (light หรือ dark)
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    console.log("Component mounted or theme changed");
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-      console.log("Saved theme found:", savedTheme);
       setTheme(savedTheme);
       document.documentElement.classList.add(savedTheme);
     } else {
-      console.log("No saved theme, using light mode");
       document.documentElement.classList.add("light");
     }
   }, []);
-  
-  const toggleTheme = () => {
-    console.log("Toggling theme");
-    if (theme === "light") {
-      console.log("Switching to dark mode");
-      setTheme("dark");
-      document.documentElement.classList.replace("light", "dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      console.log("Switching to light mode");
-      setTheme("light");
-      document.documentElement.classList.replace("dark", "light");
-      localStorage.setItem("theme", "light");
-    }
+
+  const handleThemeChange = (newTheme: string) => {
+    const oldTheme = theme;
+    setTheme(newTheme);
+    document.documentElement.classList.replace(oldTheme, newTheme);
+    localStorage.setItem("theme", newTheme);
   };
 
   return (
-    <div className="flex items-center space-x-4 justify-between mt-10">
-      <span className="text-sm">
-        {theme === "light" ? "Light Mode" : "Dark Mode"}
-      </span>
-      <label className="relative inline-flex items-center cursor-pointer">
-        <input
-          type="checkbox"
-          className="sr-only"
-          checked={theme === "dark"}
-          onChange={toggleTheme}
-        />
-        <div className="w-14 h-7 bg-gray-400 rounded-full dark:bg-gray-800"></div>
-        <div
-          className={`w-6 h-6 mx-1 bg-white rounded-full absolute top-0.5 transition-transform ${
-            theme === "dark" ? "transform translate-x-6" : ""
-          }`}
-        >
-          <span className="absolute inset-0 flex items-center justify-center">
-            {theme === "light" ? "🌞" : "🌙"}
-          </span>
-        </div>
-      </label>
+    <div className="w-full max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold">Select Theme</h2>
+        <a href="#" className="text-blue-500 hover:underline text-sm">
+          Create custom theme
+        </a>
+      </div>
+      <p className="text-gray-600 text-sm mb-4">
+        Customizing your workspace, make it more enjoyable and comfortable to work!
+      </p>
+
+      {/* Theme Options */}
+      <div className="flex gap-4">
+        {listTheme.map(({ id, label,image, borderColor }) => (
+          <label
+            key={id}
+            className={`flex-1 p-4 rounded-xl border-2 ${
+              theme === id ? borderColor : "border-gray-300"
+            } cursor-pointer transition hover:border-blue-400`}
+          >
+            <input
+              type="radio"
+              name="theme"
+              value={id}
+              checked={theme === id}
+              onChange={() => setTheme(id)}
+              className="hidden"
+            />
+            <div className="rounded-md p-4 aspect-video flex items-center justify-center">
+              <img src={image} alt={label} className="h-28 w-full object-contain " />
+            </div>
+            <div className="mt-2 flex items-center gap-2">
+              <input type="radio" checked={theme === id} readOnly />
+              <p className="text-sm font-medium">{label}</p>
+            </div>
+          </label>
+        ))}
+      </div>
     </div>
   );
 };
@@ -294,69 +361,70 @@ const SettingsPage = ({
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50 text-black text-xs ">
-      <div className="flex w-9/12 h-5/6 p-6 bg-blue-100 rounded-3xl shadow-lg relative">
-        <div className="flex w-full h-full p-6 bg-white rounded-3xl shadow-lg relative">
-          {/* Sidebar */}
-          <div className="w-1/4 p-4 border-r ">
-            <button
-              onClick={() => setActiveTab("profile")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <PersonOutline className="mr-2" /> Profile
-            </button>
-            <button
-              onClick={() => setActiveTab("account")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <SettingsOutlined className="mr-2" /> Account Settings
-            </button>
-            <button
-              onClick={() => setActiveTab("notifications")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <NotificationsNoneOutlined className="mr-2" /> Notifications
-            </button>
-            <button
-              onClick={() => setActiveTab("language")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <LanguageOutlined className="mr-2" /> Language
-            </button>
-            <button
-              onClick={() => setActiveTab("theme")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <PaletteOutlined className="mr-2" /> Theme
-            </button>
+      <div className="flex w-9/12 h-5/6 p-6 bg-white rounded-3xl shadow-lg relative">
+        {/* Sidebar */}
+        <div className="w-1/4 p-4 border-r ">
+          <hr className="my-2 border-gray-300" /> {/**เส้นคั่น */}
+          <div className="text-[8px] font-bold text-gray-600 mb-1">General</div>
+          <button
+            onClick={() => setActiveTab("profile")}
+            className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
+          >
+            <PersonOutline className="mr-2" /> Edit Profile
+          </button>
+          <button
+            onClick={() => setActiveTab("account")}
+            className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
+          >
+            <SettingsOutlined className="mr-2" /> Edit Account
+          </button>
+          <hr className="my-2 border-gray-300" />
+          <div className="text-[8px] font-bold text-gray-600 mb-1">
+            Referance
           </div>
-
-          {/* Content */}
-          <div className="w-3/4 p-6">
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-5 text-gray-500 hover:text-gray-800 text-xl "
-            >
-              ✕
-            </button>
-            <h1 className="text-2xl font-semibold text-center mb-4">
-              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}{" "}
-            </h1>
-
-            {activeTab === "profile" && <ProfileSetting />}
-            {activeTab === "account" && <AccountSettings />}
-            {activeTab === "notifications" && <NotificationsSettings />}
-            {activeTab === "language" && <LanguageSettings />}
-            {activeTab === "theme" && <ThemeSettings />}
-
-            <div className=" flex justify-end mt-10">
-              <button
-                className="btn btn-outline border border-blue-400 hover:bg-blue-400  text-blue-400 hover:text-black w-60 h-10 rounded-xl mt-10"
-                onClick={handleSaveSettings}
-              >
-                Save All Settings
-              </button>
-            </div>
+          <button
+            onClick={() => setActiveTab("language")}
+            className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
+          >
+            <LanguageOutlined className="mr-2" /> Language
+          </button>
+          <button
+            onClick={() => setActiveTab("theme")}
+            className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
+          >
+            <PaletteOutlined className="mr-2" /> Theme
+          </button>
+          <hr className="my-2 border-gray-300" />
+          <div className="text-[8px] font-bold text-gray-600 mb-1">
+            Notifications
           </div>
+          <button
+            onClick={() => setActiveTab("notifications")}
+            className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
+          >
+            <NotificationsNoneOutlined className="mr-2" /> Notifications
+          </button>
+          <hr className="my-2 border-gray-300" />
+        </div>
+
+        {/* Content */}
+        <div className="w-3/4 p-6">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-5 text-gray-500 hover:text-gray-800 text-xl "
+          >
+            ✕
+          </button>
+          <h1 className="text-2xl font-semibold text-center mb-4">
+            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}{" "}
+          </h1>
+
+          {activeTab === "profile" && <ProfileSetting />}
+          {activeTab === "account" && <AccountSettings />}
+          {activeTab === "notifications" && <NotificationsSettings />}
+          {activeTab === "language" && <LanguageSettings />}
+          {activeTab === "theme" && <ThemeSettings />}
+
         </div>
       </div>
     </div>

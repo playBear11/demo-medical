@@ -65,9 +65,9 @@ const Navbar: React.FC<NavbarProps> = () => {
             className="flex items-center space-x-2 focus:outline-none"
           >
             <img
-              src="https://png.pngtree.com/png-vector/20240120/ourmid/pngtree-sticker-of-a-doctor-attending-to-paint-in-white-coat-png-image_11471331.png" // ใช้ URL ของโปรไฟล์
+              src="https://shorturl.asia/1NPwK" // ใช้ URL ของโปรไฟล์
               alt="Profile"
-              className="w-12 h-12 rounded-full cursor-pointer"
+              className="w-14 h-14 rounded-full cursor-pointer"
             />
           </button>
           {isProfileDropdownOpen && (

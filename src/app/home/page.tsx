@@ -130,7 +130,7 @@ const home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ควบคุม Sidebar
 
   return (
-    <div className=" h-screen flex flex-col overflow-hidden"> {/*ซ่อนเส้น scroll ของจอแยกไว้ */}
+    <div className=" h-screen bg-white flex flex-col overflow-hidden"> {/*ซ่อนเส้น scroll ของจอแยกไว้ */}
       {" "}
       {/* ส่วนของ Navigation */}
       <Nav  isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>

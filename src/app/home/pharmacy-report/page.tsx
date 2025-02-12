@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import Nav from "@/component/nav";
 import Menu from "@/component/menu";
 
-const PatientAppoint = () => {
+const PharmacyReport = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ควบคุม Sidebar
 
   return (
-    <div>
+    <div className=" h-screen bg-white flex flex-col overflow-hidden">
       {/* ส่วนของ Navigation */}
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
@@ -21,4 +21,4 @@ const PatientAppoint = () => {
   );
 };
 
-export default PatientAppoint;
+export default PharmacyReport;
