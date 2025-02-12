@@ -1,235 +1,378 @@
 "use client";
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { TextField, IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material"; // ไอคอนสำหรับซ่อน/แสดงรหัสผ่าน
-import { FormControlLabel, Checkbox, Box } from "@mui/material";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import Nav from "./Components/nav";
+import Menu from "./Components/menu";
+//import ChatPopup from "./chat/page"
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { Line, Bar } from "react-chartjs-2";
+import {
+  FaUsers,
+  FaBed,
+  FaHeartbeat,
+  FaStar,
+  FaCalendar,
+  FaMoneyBill,
+  FaCheckCircle,
+} from "react-icons/fa"; // นำเข้าไอคอนจาก react-icons
 
-//กำหนด component
 
-const Login = () => {
+const home = () => {
   const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem("access_token"); // ดึง Token
+    if (!token) {
+      router.push("/Page/auth/login"); // ถ้าไม่มี Token ให้ไปหน้า Login
+    }
+  }, []);
 
-  const formik = useFormik({
-    //useformik จัดฟอร์ม
-    initialValues: {
-      // กำหนดค่าเริ่มต้น
-      username: "",
-      password: "",
-      rememberMe: false, //เพิ่มให้จดจำรหัสและยูสเส้อออออออออออออ
-    },
 
-    validationSchema: Yup.object({
-      // เอาไว้ตรวจโสบบ ว่าต้องมีค่าอะไรบ้าง เช่น ต้องมียูส ต้องใส่รหัสผ่านอย่างน้อยกี่ตัวว
-      username: Yup.string().required("is required"),
-      password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
-        .required("is required"),
-    }),
 
-    // ฟังก์ชันที่ทำงานเมื่อผู้ใช้กดปุ่ม Submit
-    onSubmit: async (values) => {
-      try {
-        // ส่งข้อมูล username และ password ไปยัง API
-        const res = await axios.post(
-          "http://iottechgroup.dyndns.biz:18180/api/token/",
-          {
-            username: values.username, // ใช้ค่าจากฟอร์มสำหรับ username
-            password: values.password, // ใช้ค่าจากฟอร์มสำหรับ password
-          }
-        );
-        if (res.status == 200) {
-          // ถ้า API ตอบกลับสถานะ 200 (สำเร็จ)
-          console.log("Login success", res.data); // แสดงข้อความใน Console
 
-          // เก็บ Access และ Refresh Token ลงใน localStorage
-          localStorage.setItem("access_token", res.data.access); // เก็บ Access Token
-          localStorage.setItem("refresh_token", res.data.refresh); // เก็บ Refresh Token
-          // window.location.href = "/app/home/dashboard/page.tsx"; // นำทางไปยังหน้า Homepage   ใน dashboard/page.tsx
+  const [isModalOpen, setIsModalOpen] = useState(false); // สถานะการเปิด-ปิด Modal
+  const [modalContent, setModalContent] = useState<string | React.ReactNode>(
+    null
+  ); // สถานะเก็บเนื้อหาของ Modal
+  const [dropdownOpen, setDropdownOpen] = useState(false); // สถานะการแสดง/ซ่อน dropdown ของโปรไฟล์
 
-          router.push("/home");
-        }
-      } catch (error) {
-        // ถ้าเกิดข้อผิดพลาด
-        console.error("Error:", error); // แสดงข้อความข้อผิดพลาดใน Console
-      }
-    },
-  });
 
-  const [showPassword, setShowPassword] = useState(false); // สร้างสถานะสำหรับแสดง/ซ่อนรหัสผ่าน
-
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // เปลี่ยนค่าของสถานะ (สลับระหว่าง true/false)
+  // ข้อมูลตัวอย่างสำหรับกราฟ (line chart)
+  const lineChartData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"], // ข้อมูลที่แสดงบนแกน X
+    datasets: [
+      {
+        label: "Patients per Month", // ชื่อกราฟ
+        data: [120, 150, 100, 180, 200, 250, 300], // ข้อมูลจำนวนผู้ป่วยในแต่ละเดือน
+        borderColor: "rgba(75, 192, 192, 1)", // สีขอบของกราฟ
+        backgroundColor: "rgba(75, 192, 192, 0.2)", // สีพื้นหลังของกราฟ
+        borderWidth: 2, // ความหนาของขอบกราฟ
+      },
+    ],
   };
 
-  const handleClick = () => {
-   
+
+  // ข้อมูลตัวอย่างสำหรับข้อมูลสรุปของโรงพยาบาล
+  const hospitalOverview = [
+    {
+      title: "Total Patients per Department", // จำนวนผู้ป่วยทั้งหมดในแต่ละแผนก
+      value: "Cardiology: 250, Neurology: 180, Pediatrics: 300", // ข้อมูลแสดงจำนวนผู้ป่วยในแต่ละแผนก
+      description: "Current patients in each department", // คำอธิบาย
+    },
+    {
+      title: "Available Beds", // จำนวนเตียงที่ว่าง/เต็ม
+      value: "50 Available / 120 Total", // จำนวนเตียงที่ว่างและทั้งหมด
+      description: "Beds status in the hospital", // คำอธิบาย
+    },
+    {
+      title: "Medical Staff Available", // จำนวนแพทย์/พยาบาลที่พร้อมให้บริการ
+      value: "150 Doctors, 200 Nurses", // จำนวนแพทย์และพยาบาล
+      description: "Available medical staff for services", // คำอธิบาย
+    },
+    {
+      title: "Patient Satisfaction Rating", // การประเมินความพึงพอใจของผู้ป่วย
+      value: "4.5/5", // คะแนนการประเมิน
+      description: "Based on recent surveys", // คำอธิบาย
+    },
+  ];
+
+
+  // ข้อมูลตัวอย่างสำหรับกราฟ (bar chart)
+  const barChartData = {
+    labels: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ], // ข้อมูลที่แสดงบนแกน X
+    datasets: [
+      {
+        label: "Daily Appointments", // ชื่อกราฟ
+        data: [20, 25, 30, 35, 40, 45, 50], // ข้อมูลการนัดหมายในแต่ละวัน
+        backgroundColor: "rgba(153, 102, 255, 0.6)", // สีพื้นหลังของกราฟ
+        borderColor: "rgba(153, 102, 255, 1)", // สีขอบของกราฟ
+        borderWidth: 1, // ความหนาของขอบกราฟ
+      },
+    ],
   };
+
+
+  // ข้อมูลตัวอย่างสำหรับสถิติ
+  const stats = [
+    {
+      title: "New Patients", // ชื่อสถิติ
+      value: 532, // ค่า
+      change: "+12%", // การเปลี่ยนแปลง
+      description: "compared to last month", // คำอธิบาย
+    },
+    {
+      title: "Appointments Today",
+      value: 74,
+      change: "-5%",
+      description: "compared to yesterday",
+    },
+    {
+      title: "Total Revenue",
+      value: "$23,540",
+      change: "+8%",
+      description: "this month",
+    },
+    {
+      title: "Pending Appointments",
+      value: 15,
+      change: "-3%",
+      description: "currently",
+    },
+  ];
+
+
+  // ฟังก์ชันเปิด Modal
+  const openModal = (content: React.ReactNode) => {
+    setModalContent(content); // ตั้งค่าเนื้อหาของ Modal
+    setIsModalOpen(true); // เปิด Modal
+  };
+
+
+  // ฟังก์ชันปิด Modal
+  const closeModal = () => {
+    setModalContent(null); // ล้างเนื้อหาของ Modal
+    setIsModalOpen(false); // ปิด Modal
+  };
+
+
+  // ฟังก์ชันเปิด/ปิด dropdown
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ควบคุม Sidebar
+
 
   return (
-    //หลังซับสมิท จะเชื่อมฟอมิก แฮนับเพื่อส่งฟอร์ม
-    <form onSubmit={formik.handleSubmit}>
-      <div className="relative flex h-screen w-full items-center justify-center">
-        {/* พื้นหลังเบลอ */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "url('https://i.pinimg.com/736x/66/48/e9/6648e93163b136c216129aebc9c032b2.jpg')",
-            backgroundSize: "cover", // ให้รูปภาพแสดงเต็มพื้นที่
-            backgroundPosition: "center", // จัดให้อยู่ตรงกลาง
-            backgroundAttachment: "fixed", // ให้พื้นหลังไม่เลื่อน
-            filter: "blur(8px)", // เบลอพื้นหลัง
-            WebkitFilter: "blur(8px)",
-            zIndex: "-1", // ทำให้พื้นหลังอยู่ด้านล่าง
-          }}
-        ></div>
-
-        {/* กล่องข้อมูล */}
-        <div
-          className="flex border border-gray-400 text-black font-semibold text-lg w-6/12 h-4/6 rounded-2xl"
-          style={{
-            backgroundColor: "rgba(255, 255, 255, 0.5)", // สีพื้นหลังโปร่งแสง
-            boxShadow: "0 4px 15px rgba(0, 0, 0, 0.5)", // เงารอบกรอบ
-            backdropFilter: "blur(4px)", // เอฟเฟกต์เบลอ
-            borderRadius: "30px", // มุมโค้งมน
-            // maxWidth: "1800px", // ความกว้างของกล่องใหญ่
-            overflow: "hidden", // ซ่อนส่วนที่ล้น
-          }}
-        >
-          {/* ภาพด้านซ้าย */}
-          <div
-            className="flex-shrink-0"
-            style={{
-              width: "50%", // ใช้ครึ่งหนึ่งของพื้นที่กล่องใหญ่
-              backgroundImage:
-                "url('https://i.pinimg.com/736x/39/47/e5/3947e557afe65d9027229665e8fc2960.jpg')", // ภาพที่ต้องการ
-              backgroundSize: "cover", // ให้ภาพเต็มพื้นที่
-              backgroundPosition: "center", // จัดภาพให้อยู่ตรงกลาง
-            }}
-          ></div>
-
-          {/* ช่องกรอกข้อมูลด้านขวา */}
-          <div
-            className="flex flex-col justify-center px-6 py-10"
-            style={{
-              width: "50%", // ใช้ครึ่งหนึ่งของพื้นที่กล่องใหญ่
-            }}
-          >
-            {/* โลโก้ */}
-            <div className="flex justify-center mb-4">
-              <div
-                className="w-20 h-20 rounded-full"
-                style={{
-                  backgroundImage:
-                    "url('https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg')",
-                  backgroundSize: "cover",
-                }}
-              />
-            </div>
-            {/*} <h1>Login</h1>*/}
-
-            <div className="mb-4 mt-4">
-              <TextField //กำหนดชื่อฟิลด์ของมัน
-                fullWidth
-                id="username"
-                name="username"
-                label="username"
-                value={formik.values.username} //เชื่อมค่าและสถานะ
-                onChange={formik.handleChange} //ถ้าค่าเปลี่ยน เธอจะถูกเรียกใช้
-                onBlur={formik.handleBlur} //ถ้าข้อมูลในฟิลด์ไม่ถูกต้อง เธอจะถูกเรียก
-                error={
-                  formik.touched.username && Boolean(formik.errors.username)
-                } //กำหนดให้แสดงสีแดงหากเกิดข้อผิดพลาด
-                helperText={formik.touched.username && formik.errors.username} //ถ้าเธอไม่ครบ เราจะร้อง ถ้าครบถ้วน จะไม่ปริปาก
-                sx={{ marginBottom: 2 }} // ใช้ marginBottom ของแมทยูไอ ให้ช่องห่างกัน
-              />
-
-              <TextField
-                fullWidth
-                type={showPassword ? "text" : "password"} // ถ้า showPassword เป็น true ให้แสดงรหัสผ่าน
-                id="password"
-                name="password"
-                label="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                } //กำหนดให้แสดงสีแดงหากเกิดข้อผิดพลาด
-                helperText={formik.touched.password && formik.errors.password}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleTogglePasswordVisibility} // เรียกฟังก์ชันเมื่อคลิกไอคอน
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}{" "}
-                        {/* ไอคอนที่แสดง */}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
-              <div className="mb-4 flex items-center space-x-20">
-                <FormControlLabel //ใช้ในการควบคุมและแสดง Label
-                  control={
-                    <Checkbox
-                      id="rememberMe"
-                      name="rememberMe"
-                      checked={formik.values.rememberMe}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      color="primary"
-                    />
-                  }
-                  label="Remember Me"
-                  sx={{ "& .MuiTypography-root": { fontSize: "0.75rem" } }}
-                />
-                <Link
-                  href="/reset-password"
-                  className="text-xs font-medium text-cyan-800 hover:text-blue-700 focus:outline-none focus:underline transition ease-in-out duration-150"
-                >
-                  Forget Your password?
-                </Link>
-              </div>
-            </div>
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                style={{
-                  border: "1px solid #0b6176", // สีและขนาดขอบของปุ่ม
-                  borderRadius: "9999px", // เพิ่มขอบโค้งมน
-                }}
-                className="btn btn-accent btn-outline h-8 w-52 hover:bg-blue-200 text-base"
-                onClick={handleClick}
+    <div className="h-screen flex flex-col overflow-hidden bg-white">
+    <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+    <div className="flex flex-1 overflow-hidden">
+      <Menu isSidebarOpen={isSidebarOpen} />
+      <div
+        className={`p-4 overflow-auto transition-all duration-300 ${
+          isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
+        }`}
+      >
+          <div className=" h-64  bg-gradient-to-r from-indigo-400 via-blue-400 to-sky-300 rounded-2xl mb-5 flex justify-between items-center p-6">
+            {/* ส่วนข้อความด้านซ้าย */}
+            <div className="text-white">
+              <h1
+                className="text-white text-2xl font-extrabold px-4 py-2 ml-4"
+                style={{ fontFamily: "Dancing Script, cursive" }}
               >
-                LogIn
+                Good Morning
+              </h1>
+              <p
+                className="text-white px-4 ml-4 "
+                style={{ fontFamily: "Dancing Script, cursive" }}
+              >
+                Have Your Enjoyed!!
+              </p>
+            </div>
+
+
+            {/* รูปหมอด้านขว */}
+            <img
+              src="https://png.pngtree.com/png-vector/20221119/ourmid/pngtree-smiling-male-doctor-with-stethoscope-png-image_6471575.png"
+              alt="Doctor Illustration"
+              className="h-64 "
+            />
+          </div>
+
+
+          {/* Statistics Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            {/* แสดงสถิติ */}
+            {stats.map((stat, index) => (
+              <div
+                key={index}
+                className=" p-2 shadow-md rounded-lg border h-28"
+              >
+                <div className="flex items-center m-2 h-20">
+                  {/*แสดงไอคอน */}
+                  {stat.title === "New Patients" && (
+                    <FaUsers className="text-red-600 text-4xl mr-2" />
+                  )}
+                  {stat.title === "Appointments Today" && (
+                    <FaCalendar className="text-violet-600 text-4xl mr-2" />
+                  )}
+                  {stat.title === "Total Revenue" && (
+                    <FaMoneyBill className="text-pink-600 text-4xl mr-2" />
+                  )}
+                  {stat.title === "Pending Appointments" && (
+                    <FaCheckCircle className="text-sky-600 text-4xl mr-2" />
+                  )}
+
+
+                  <div>
+                    <h3 className="text-sm mx-1 font-semibold text-black ">
+                      {stat.title}
+                    </h3>
+                    <p className="text-base mx-1 text-blue-400 font-bold">
+                      {stat.value}
+                    </p>
+                    <p
+                      className={`text-xs ${
+                        stat.change.startsWith("+")
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {stat.change}
+                    </p>
+                    <button
+                      className=" text-blue-500 text-sm mx-1 hover:underline"
+                      onClick={() =>
+                        openModal(
+                          <div>
+                            <h2 className="text-xl text-black font-bold mb-4">
+                              {stat.title} Details
+                            </h2>
+                            <p className="text-lg text-gray-500">
+                              {stat.description}
+                            </p>
+                            <p className="text-2xl text-blue-400 font-bold mt-2">
+                              {stat.value}
+                            </p>
+                            <p
+                              className={`text-sm ${
+                                stat.change.startsWith("+")
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              {stat.change}
+                            </p>
+                          </div>
+                        )
+                      }
+                    >
+                      View Details {/* ปุ่มดูรายละเอียด */}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+
+          {/* Section: Hospital Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            {/* แสดงข้อมูลสรุปของโรงพยาบาล */}
+            {hospitalOverview.map((overview, index) => (
+              <div
+                key={index}
+                className="bg-white p-3 shadow-md rounded-lg border h-28"
+              >
+                <div className="flex items-center m-2 h-20">
+                  {/* แสดงไอคอน */}
+                  {overview.title === "Total Patients per Department" && (
+                    <FaUsers className="text-orange-600 text-4xl mr-2" />
+                  )}
+                  {overview.title === "Available Beds" && (
+                    <FaBed className="text-blue-600 text-4xl mr-2" />
+                  )}
+                  {overview.title === "Medical Staff Available" && (
+                    <FaHeartbeat className="text-yellow-600 text-4xl mr-2" />
+                  )}
+                  {overview.title === "Patient Satisfaction Rating" && (
+                    <FaStar className="text-green-600 text-4xl mr-2" />
+                  )}
+
+
+                  <div>
+                    <h3 className="text-sm mx-1 font-bold text-black">
+                      {overview.title}
+                    </h3>
+                    <p className="text-xs mx-1 mt-2 text-pink-500 font-light">
+                      {overview.value}
+                    </p>
+                    <button
+                      className="mt-2 text-sm mx-1 text-blue-500 hover:underline"
+                      onClick={() =>
+                        openModal(
+                          <div>
+                            <h2 className="text-xl text-black font-bold mb-4">
+                              {overview.title} Details
+                            </h2>
+                            <p className="text-base text-gray-500">
+                              {overview.description}
+                            </p>
+                            <p className="text-sm text-sky-500 font-bold mt-2">
+                              {overview.value}
+                            </p>
+                          </div>
+                        )
+                      }
+                    >
+                      View Details {/* ปุ่มดูรายละเอียด */}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="bg-white p-6 shadow-md rounded-lg border-2">
+              <h3 className="text-lg text-black font-semibold mb-4">
+                Patients per Month
+              </h3>
+              <Line data={lineChartData} /> {/* แสดงกราฟ Line */}
+              <button
+                className="mt-4 text-blue-500 hover:underline"
+                onClick={() => openModal(<Line data={lineChartData} />)} //เปิด Modal เพื่อดูกราฟเต็ม
+              >
+                View Full Chart
               </button>
             </div>
 
-            <div className="mb-4 mt-4 flex justify-center">
-              <p className=" text-xs  font-medium">
-                Not Registered?{" "}
-                <a
-                  href="/register"
-                  className="text-xs  text-cyan-900 hover:text-blue-700 focus:outline-none focus:underline transition ease-in-out duration-150"
-                >
-                  Create an Account
-                </a>
-              </p>
+
+            <div className="bg-white p-6 shadow-md rounded-lg border-2">
+              <h3 className="text-lg text-black font-semibold mb-4">
+                Daily Appointments
+              </h3>
+              <Bar data={barChartData} /> {/* แสดงกราฟ Bar */}
+              <button
+                className="mt-4 text-blue-500 hover:underline"
+                onClick={() => openModal(<Bar data={barChartData} />)} // เปิด Modal เพื่อดูกราฟเต็ม
+              >
+                View Full Chart
+              </button>
             </div>
           </div>
+
+
+          {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
+            {modalContent}
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Close
+              </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </form>
+    </div>
   );
 };
 
-export default Login;
+
+export default home;
