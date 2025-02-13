@@ -151,7 +151,7 @@ const home = () => {
 
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden bg-white">
+    <div className="h-screen flex flex-col overflow-hidden ">
     <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
     <div className="flex flex-1 overflow-hidden">
       <Menu isSidebarOpen={isSidebarOpen} />

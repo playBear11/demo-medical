@@ -2,9 +2,9 @@
 import React, { use, useEffect, useState } from "react";
 import Nav from "@/app/Components/nav";
 import Menu from "@/app/Components/menu";
-import AddModal from "@/app/Components/modal/add"
+import AddModal from "@/app/Components/modal/add";
 import DeleteModal from "@/app/Components/modal/delete";
-import EditModal from "@/app/Components/modal/edit";
+import EditUserModal from "@/app/Components/modal/edituser";
 
 import clsx from "clsx";
 import { FilePenLine, FileX } from "lucide-react";
@@ -23,43 +23,43 @@ const Users = () => {
   // ตัวอย่างข้อมูลผู้ใช้ (users)
   const [users, setUsers] = useState<Users[]>([
     {
-        profile: "https://github.com/shadcn.png",
-        HN_Number: "1255555",
-        name: "macros",
-        ID_Card: "********",
-        gender: "Male",
-        id: undefined
+      profile: "https://github.com/shadcn.png",
+      HN_Number: "1255555",
+      name: "macros",
+      ID_Card: "********",
+      gender: "Male",
+      id: undefined,
     },
     {
-        profile: "https://github.com/shadcn.png",
-        HN_Number: "1255556",
-        name: "maxy",
-        ID_Card: "********",
-        gender: "Female",
-        id: undefined
+      profile: "https://github.com/shadcn.png",
+      HN_Number: "1255556",
+      name: "maxy",
+      ID_Card: "********",
+      gender: "Female",
+      id: undefined,
     },
     {
-        profile: "https://github.com/shadcn.png",
-        HN_Number: "1255557",
-        name: "macro",
-        ID_Card: "********",
-        gender: "Male",
-        id: undefined
+      profile: "https://github.com/shadcn.png",
+      HN_Number: "1255557",
+      name: "macro",
+      ID_Card: "********",
+      gender: "Male",
+      id: undefined,
     },
     {
-        profile: "https://github.com/shadcn.png",
-        HN_Number: "1255558",
-        name: "macy",
-        ID_Card: "********",
-        gender: "Female",
-        id: undefined
+      profile: "https://github.com/shadcn.png",
+      HN_Number: "1255558",
+      name: "macy",
+      ID_Card: "********",
+      gender: "Female",
+      id: undefined,
     },
   ]);
 
   // Code สำหรับ users และ State อื่น ๆ
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false); //Modal การเพิ่มสมาชิก
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); //Modal การแก้ไขสมาชิก
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false); //Modal การแก้ไขสมาชิก
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); //Modal การลบสมาชิก
   const [selectedUser, setSelectedUser] = useState<any>(null); //ใช้เก็บข้อมูลของผู้ใช้ที่เลือก
 
@@ -90,7 +90,12 @@ const Users = () => {
   };
 
   // สร้างอาร์เรย์ใหม่ที่รวมผู้ใช้เดิมทั้งหมดคือ ยูส และเพิ่มผู้ใช้ใหม่ นิวยูส
-  const handleAddUsers = (userData: { username: string; email: string; first_name: string; last_name: string; }) => {
+  const handleAddUsers = (userData: {
+    username: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+  }) => {
     const newUser: Users = {
       id: undefined,
       profile: "https://github.com/shadcn.png",
@@ -105,15 +110,14 @@ const Users = () => {
     setIsAddModalOpen(false);
   };
 
+  const closeAddModal = () => {
+    setIsAddModalOpen(false); // ปิด modal
+  };
 
-const closeAddModal = () => {
-  setIsAddModalOpen(false); // ปิด modal
-};
-
-// ฟังก์ชันสำหรับเปิด Modal การแก้ไขข้อมูล
-const openEditModal = (user: any) => {
+  // ฟังก์ชันสำหรับเปิด Modal การแก้ไขข้อมูล
+  const openEditModal = (user: any) => {
     setSelectedUser(user); // ตั้งค่าผู้ใช้ที่เลือก
-    setIsEditModalOpen(true); // เปิด EditModal
+    setIsEditUserModalOpen(true); // เปิด EditModal
   };
 
   // ฟังก์ชันสำหรับเปิด Modal การลบข้อมูล
@@ -147,23 +151,25 @@ const openEditModal = (user: any) => {
   ];
 
   return (
-    <div className=" h-screen bg-white flex flex-col overflow-hidden">
-      {/* ส่วนของ Navigation */}
+    <div className="h-screen bg-white flex flex-col overflow-hidden">
+      {/* Navigation */}
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-      {/* ส่วนของ Menu */}
-      <div className="flex">
-        <div className="w-56">
-          <Menu isSidebarOpen={isSidebarOpen} />
-        </div>
-
+      {/* Sidebar + Content */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
         <div
-          className={`p-4 h-screen overflow-auto transition-all duration-300 ${
-            isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-56" : "w-0"
           }`}
         >
+          <Menu isSidebarOpen={isSidebarOpen} />
+        </div>
+        {/* Content */}
+        <div className="p-4 h-screen overflow-auto flex-1 transition-all duration-300">
+          <h1 className="text-2xl text-black font-bold mb-4">User</h1>
           <div className="flex justify-between items-center mt-8">
-            {/* ช่องค้นหาที่สามารถพิมพ์ข้อความเพื่อค้นหาได้ */}
+            {/* Search Input */}
             <input
               type="search"
               placeholder="Search"
@@ -284,19 +290,20 @@ const openEditModal = (user: any) => {
             onSubmit={handleAddUsers} // ทำการเพิ่มข้อมูล
           />
 
-          <EditModal
-            isOpen={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)} // ปิด modal
+          <EditUserModal
+            isOpen={isEditUserModalOpen}
+            onClose={() => {
+              console.log("Closing modal");
+              setIsEditUserModalOpen(false);
+            }} // ปิด modal
             user={selectedUser} // ส่งผู้ใช้ที่เลือก
             onSubmit={(updatedUser) => {
-              // อัปเดตข้อมูลผู้ใช้
-              const updatedUsers = users.map(
-                (user) => (user.id === updatedUser.id ? updatedUser : user) // ตรวจสอบว่า user.id ตรงกับ updatedUser.id หรือไม่
-                // ถ้าตรงกัน จะใช้ข้อมูลใหม่ (updatedUser) แทน, ถ้าไม่ตรง จะคงข้อมูลเดิมไว้
+              const updatedUsers = users.map((user) =>
+                user.id === updatedUser.id ? updatedUser : user
               );
-              setUsers(updatedUsers); // อัปเดตสถานะ users ด้วยอาร์เรย์ใหม่ที่มีการแก้ไขข้อมูลผู้ใช้
-              setResults(updatedUsers); // อัปเดตการแสดงผล result ให้ตรงกับข้อมูลที่เราแก้ไขไว้
-              setIsEditModalOpen(false); // ปิด modal
+              setUsers(updatedUsers);
+              setResults(updatedUsers);
+              setIsEditUserModalOpen(false); // ปิด modal
             }}
           />
         </div>

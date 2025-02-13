@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import Nav from "@/app/Components/nav";
 import Menu from "@/app/Components/menu";
@@ -21,28 +21,28 @@ const nurse: Nurse[] = [
     username: "Nurse1",
     hospital: "Hospital A",
     gender: "Male",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "https://shorturl.asia/HOrI2",
   },
   {
     name: "dako",
     username: "Nurse2",
     hospital: "Hospital B",
     gender: "Female",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "https://shorturl.asia/HOrI2",
   },
   {
     name: "fep",
     username: "Nurse3",
     hospital: "Hospital C",
     gender: "Male",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "https://shorturl.asia/HOrI2",
   },
   {
     name: "gre",
     username: "Nurse4",
     hospital: "Hospital D",
     gender: "Female",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "https://shorturl.asia/HOrI2",
   },
 ];
 
@@ -69,7 +69,9 @@ const Nurse = () => {
   };
 
   // ฟังก์ชันที่ใช้สำหรับการแก้ไขข้อมูลในฟอร์ม
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     if (editedNurse) {
       setEditedNurse({
@@ -84,14 +86,14 @@ const Nurse = () => {
     if (editedNurse) {
       // อัปเดตชื่อเต็มหลังจากแก้ไข
       const updatedNurseName = `${editedNurse.firstname} ${editedNurse.lastname}`;
-      
+
       // อัปเดตข้อมูลแพทย์ที่เลือกใน array
       const updatedNurses = nurse.map((nurseItem) =>
         nurseItem.username === editedNurse.username
           ? { ...editedNurse, name: updatedNurseName }
           : nurseItem
       );
-      
+
       console.log("Updated Nurse:", editedNurse);
       setIsModalOpen(false); // ปิด Modal หลังจากบันทึก
     }
@@ -100,14 +102,18 @@ const Nurse = () => {
   return (
     <div className="h-screen bg-white flex flex-col overflow-hidden">
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <div className="flex">
-        <div className="w-56">
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar ที่ซ่อนหรือแสดง */}
+        <div
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-56" : "w-0"
+          }`}
+        >
           <Menu isSidebarOpen={isSidebarOpen} />
         </div>
-        <div
-          className={`p-4 h-screen overflow-auto transition-all duration-300 ${isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"}`}
-        >
-          <h1 className="text-2xl text-black font-bold mt-12 mb-4">Nurse</h1>
+
+        <div className="p-4 overflow-auto flex-1">
+          <h1 className="text-2xl text-black font-bold mb-4">Nurse</h1>
           <hr />
           <div className="mt-5 flex justify-end">
             <button
@@ -132,30 +138,29 @@ const Nurse = () => {
 
           <table className="w-full border-collapse bg-gray-50 mt-5">
             <thead>
-              <tr className="bg-blue-300">
-                <th className=" p-2 text-center text-black text-sm">Profile</th>
-                <th className=" p-2 text-center text-black text-sm">Username</th>
-                <th className=" p-2 text-center text-black text-sm">Name</th>
-                <th className=" p-2 text-center text-black text-sm">Hospital</th>
-                <th className=" p-2 text-center text-black text-sm">Gender</th>
-                <th className=" p-2 text-center text-black text-sm">Detail</th>
+              <tr className="bg-blue-300 p-2 text-center text-black text-sm h-10">
+                <th>Profile</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Hospital</th>
+                <th>Gender</th>
+                <th>Detail</th>
               </tr>
             </thead>
             <tbody>
               {nurse.map((nurse, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="p-2">
+                <tr key={index} className="hover:bg-gray-100 text-xs text-gray-600 text-center p-2">
+                  <td className="p-2 flex justify-center items-center">
                     <img
                       src={nurse.avatar || "/placeholder.svg"}
                       alt={nurse.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
+                      className="w-16 h-16 rounded-full object-cover object-center"/>
                   </td>
-                  <td className="text-xs text-gray-600 text-center p-2">{nurse.username}</td>
-                  <td className="text-xs text-gray-600 text-center p-2">{nurse.name}</td>
-                  <td className="text-xs text-gray-600 text-center p-2">{nurse.hospital}</td>
-                  <td className="text-xs text-gray-600 text-center p-2">{nurse.gender}</td>
-                  <td className="text-xs text-gray-600 text-center p-2">
+                  <td>{nurse.username}</td>
+                  <td>{nurse.name}</td>
+                  <td>{nurse.hospital}</td>
+                  <td>{nurse.gender}</td>
+                  <td>
                     <button
                       onClick={() => openModal(nurse)}
                       className="text-blue-400 px-3 py-1 rounded hover:text-blue-600 transition-colors"
@@ -187,13 +192,17 @@ const Nurse = () => {
             {/* Form */}
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-gray-700 text-sm font-semibold">Information</h3>
+                <h3 className="text-gray-700 text-sm font-semibold">
+                  Information
+                </h3>
                 <hr />
               </div>
 
               <form onSubmit={handleSave} className="space-y-4">
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">Username</label>
+                  <label className="block text-xs text-gray-600 mb-1">
+                    Username
+                  </label>
                   <input
                     type="text"
                     defaultValue={selectedNurse.username}
@@ -201,9 +210,11 @@ const Nurse = () => {
                     disabled
                   />
                 </div>
-                
+
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">Firstname</label>
+                  <label className="block text-xs text-gray-600 mb-1">
+                    Firstname
+                  </label>
                   <input
                     type="text"
                     name="firstname"
@@ -214,7 +225,9 @@ const Nurse = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">Lastname</label>
+                  <label className="block text-xs text-gray-600 mb-1">
+                    Lastname
+                  </label>
                   <input
                     type="text"
                     name="lastname"
@@ -225,7 +238,9 @@ const Nurse = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">Gender</label>
+                  <label className="block text-xs text-gray-600 mb-1">
+                    Gender
+                  </label>
                   <select
                     name="gender"
                     value={editedNurse.gender}
@@ -238,7 +253,9 @@ const Nurse = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">Hospital</label>
+                  <label className="block text-xs text-gray-600 mb-1">
+                    Hospital
+                  </label>
                   <input
                     type="text"
                     defaultValue={selectedNurse.hospital}

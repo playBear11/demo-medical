@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import Nav from "@/app/components/nav";
-import Menu from "@/app/components/menu";
+import Nav from "@/app/Components/nav";
+import Menu from "@/app/Components/menu";
 import { TextField } from "@mui/material";
 
 
@@ -31,7 +31,7 @@ const page = () => {
           <div className={`p-4 h-screen overflow-auto transition-all duration-300 ${isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"}`}>
 
 
-          <h1 className="text-2xl flex mt-12 ml-3 text-black font-semibold mb-3">
+          <h1 className="text-2xl flex ml-3 text-black font-semibold mb-3">
             Report
           </h1>
           <hr/>

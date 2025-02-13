@@ -16,31 +16,31 @@ interface Doctor {
 const doctors: Doctor[] = [
   {
     name: "Dr. John Doe",
-    username: "johndoe",
+    username: "john doe",
     hospital: "Hospital A",
     gender: "Male",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "https://shorturl.asia/z7ZR2",
   },
   {
     name: "Dr. Jane Smith",
-    username: "janesmith",
+    username: "jane smith",
     hospital: "Hospital B",
     gender: "Female",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "https://shorturl.asia/z7ZR2",
   },
   {
     name: "Dr. Mike Johnson",
-    username: "mikejohnson",
+    username: "mike johnson",
     hospital: "Hospital C",
     gender: "Male",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "https://shorturl.asia/z7ZR2",
   },
   {
     name: "Dr. Sarah Lee",
-    username: "sarahlee",
+    username: "sarah lee",
     hospital: "Hospital D",
     gender: "Female",
-    avatar: "/placeholder.svg?height=100&width=100",
+    avatar: "https://shorturl.asia/z7ZR2",
   },
 ];
 
@@ -63,15 +63,17 @@ const Doctors = () => {
     <div className="h-screen bg-white flex flex-col overflow-hidden">
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
       <div className="flex flex-1 overflow-hidden">
-        <div className="w-56">
-          <Menu isSidebarOpen={isSidebarOpen} />
-        </div>
+        {/* Sidebar ที่ซ่อนหรือแสดง */}
         <div
-          className={`p-4 overflow-auto transition-all duration-300 ${
-            isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
+          className={`transition-all duration-300 ${
+            isSidebarOpen ? "w-56" : "w-0"
           }`}
         >
-          <h1 className="text-2xl text-black font-bold mt-12 mb-4">Doctors</h1>
+          <Menu isSidebarOpen={isSidebarOpen} />
+        </div>
+
+        <div className="p-4 overflow-auto flex-1">
+          <h1 className="text-2xl text-black font-bold mb-4">Doctors</h1>
 
           <hr />
 
@@ -99,42 +101,28 @@ const Doctors = () => {
 
           <table className="w-full border-collapse bg-gray-50 mt-5">
             <thead>
-              <tr className="bg-blue-300">
-                <th className=" p-2 text-center text-black text-sm">Profile</th>
-                <th className=" p-2 text-center text-black text-sm">
-                  Username
-                </th>
-                <th className=" p-2 text-center text-black text-sm">Name</th>
-                <th className=" p-2 text-center text-black text-sm">
-                  Hospital
-                </th>
-                <th className=" p-2 text-center text-black text-sm">Gender</th>
-                <th className=" p-2 text-center text-black text-sm">Detail</th>
+              <tr className="bg-blue-300  p-2 text-center text-black text-sm h-10">
+                <th>Profile</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Hospital</th>
+                <th>Gender</th>
+                <th>Detail</th>
               </tr>
             </thead>
             <tbody>
               {doctors.map((doctor, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className=" p-2">
+                <tr key={index} className="hover:bg-gray-50 text-xs  text-gray-600 text-center p-2">
+                  <td className="p-2 flex justify-center items-center">
                     <img
                       src={doctor.avatar || "/placeholder.svg"}
                       alt={doctor.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  </td>
-                  <td className=" text-xs  text-gray-600 text-center p-2">
-                    {doctor.username}
-                  </td>
-                  <td className=" text-xs  text-gray-600 text-center p-2">
-                    {doctor.name}
-                  </td>
-                  <td className=" text-xs  text-gray-600 text-center p-2">
-                    {doctor.hospital}
-                  </td>
-                  <td className=" text-xs  text-gray-600 text-center p-2">
-                    {doctor.gender}
-                  </td>
-                  <td className=" text-xs  text-gray-600 text-center p-2">
+                      className="w-16 h-16 rounded-full object-cover"/> </td>
+                  <td>{doctor.username}</td>
+                  <td>{doctor.name}</td>
+                  <td>{doctor.hospital}</td>
+                  <td>{doctor.gender}</td>
+                  <td>
                     <button
                       onClick={() => openModal(doctor)}
                       className=" text-blue-400 px-3 py-1 rounded hover:text-blue-600 transition-colors"
@@ -186,9 +174,7 @@ const Doctors = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">
-                    Firstname
-                  </label>
+                  <label className="block text-xs text-gray-600 mb-1"> Firstname </label>
                   <input
                     type="text"
                     defaultValue={selectedDoctor.name.split(" ")[1]}
@@ -197,9 +183,7 @@ const Doctors = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">
-                    Lastname
-                  </label>
+                  <label className="block text-xs text-gray-600 mb-1"> Lastname  </label>
                   <input
                     type="text"
                     defaultValue={selectedDoctor.name.split(" ")[2] || ""}
@@ -208,9 +192,7 @@ const Doctors = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">
-                    Gender
-                  </label>
+                  <label className="block text-xs text-gray-600 mb-1">  Gender  </label>
                   <select
                     defaultValue={selectedDoctor.gender}
                     className="w-full p-2 border rounded focus:outline-none focus:ring-2 text-black text-xs focus:ring-blue-500"
@@ -221,9 +203,7 @@ const Doctors = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-gray-600 mb-1">
-                    Hospital
-                  </label>
+                  <label className="block text-xs text-gray-600 mb-1">  Hospital  </label>
                   <input
                     type="text"
                     defaultValue={selectedDoctor.hospital}
@@ -244,7 +224,6 @@ const Doctors = () => {
         </div>
       )}
     </div>
-
   );
 };
 

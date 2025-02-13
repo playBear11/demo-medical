@@ -90,7 +90,7 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
   return (
     <div className="flex h-screen overflow-y-auto">
       {isSidebarOpen && (
-        <aside className="bg-gray-200 p-4 h-screen w-56">
+        <aside className="bg-sky-50 p-4 h-screen w-56">
           <nav className="flex-1">
             <ul className="space-y-1.5 px-2">
               <hr className="my-2 border-gray-300" />
