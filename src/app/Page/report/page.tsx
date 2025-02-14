@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Nav from "@/app/Components/nav";
 import Menu from "@/app/Components/menu";
 import { TextField } from "@mui/material";
+import { jsPDF } from "jspdf"; // import jsPDF
 
 
 const page = () => {
@@ -17,10 +18,35 @@ const page = () => {
     setStartDate(e.target.value);
   };
 
-
   const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEndDate(e.target.value);
   };
+
+   // ฟังก์ชัน export ข้อมูลเป็น PDF
+   const exportAllDataToPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Complete System Report", 20, 20);
+
+    // ข้อมูลที่ต้องการแสดงใน PDF
+    const systemData = [
+      ["Report Type", "Start Date", "End Date", "Selected Date"],
+      // สามารถเพิ่มข้อมูลอื่นๆ จากระบบได้ เช่น ข้อมูลจากฐานข้อมูล, สถิติการใช้งาน, หรือข้อมูลผู้ใช้
+    ];
+
+    doc.setFontSize(12);
+    let yOffset = 30;       //ตัวแปรที่ใช้ในการจัดตำแหน่งและระยะห่างจอกขอบของข้อความใน PDF
+    systemData.forEach((row) => {
+      doc.text(row.join(" "), 20, yOffset);
+      yOffset += 10; // ขยับลงใน PDF
+    });
+
+    // ดาวน์โหลดยังไงก็ได้เป็นไฟล์ PDF
+    doc.save("complete-system-report.pdf");
+  };
+
+
   return (
     <div className="h-screen bg-white flex flex-col overflow-hidden">
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
@@ -127,21 +153,22 @@ const page = () => {
        </div>
  
        <div className="mt-5 ml-3">
-         <TextField
-           label="Date End"
-           type="date"
-           value={endDate} // ใช้ state ของ endDate
-           onChange={handleEndDateChange}
-           sx={{ width: 400 }} // กำหนดขนาดของ TextField
-           InputLabelProps={{
-             shrink: true, // ทำให้ label หดเมื่อเลือกวันที่
-           }}
-         />
+            <TextField
+              label="Date End"
+              type="date"
+              value={endDate}
+              onChange={handleEndDateChange}
+              sx={{ width: 400 }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
           </div>
 
-
-          <button className="bg-blue-400 text-white w-96  mt-5 ml-5 h-8 rounded-lg">
-            Export
+          <button
+            onClick={exportAllDataToPDF}
+            className="bg-blue-400 text-white w-96 mt-5 ml-5 h-8 rounded-lg">
+            Export as PDF
           </button>
         </div>
       </div>

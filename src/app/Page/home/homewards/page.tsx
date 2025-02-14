@@ -1,84 +1,91 @@
 "use client";
-import { useState, useEffect } from "react"; // Importing React hooks
+import { useState } from "react";
 import { Card, Modal, Box } from "@mui/material";
 import Nav from "@/app/Components/nav";
 import Menu from "@/app/Components/menu";
+
+import HealthData from "@/app/Components/modal/modal-ward/Symptom";
+import TemperatureModal from "@/app/Components/modal/modal-ward/TemperatureModal";
+import BloodSugarModal from "@/app/Components/modal/modal-ward/BloodSugarModal";
+import HeartRateModal from "@/app/Components/modal/modal-ward/HeartRateModal";
+import OxygenModal from "@/app/Components/modal/modal-ward/OxygenModal";
+import BloodPressureModal from "@/app/Components/modal/modal-ward/BloodPressureModal";
 import clsx from "clsx";
-
-// Sample data with status
-const patientData = [
-  {
-    name: "Mr. John",
-    date: "05/02/2025",
-    hn: "123456789",
-    status: "high", // red
-  },
-  {
-    name: "Mr. Smith",
-    date: "05/02/2025",
-    hn: "987654321",
-    status: "low", // yellow
-  },
-  {
-    name: "Mrs. Jane",
-    date: "05/02/2025",
-    hn: "456789123",
-    status: "normal", // green
-  },
-  {
-    name: "Ms. Sarah",
-    date: "05/02/2025",
-    hn: "789123456",
-    status: "high", // red
-  },
-];
-
-const tabs = [
-  { title: "All", value: "all" },
-  { title: "High", value: "high" },
-  { title: "Low", value: "low" },
-  { title: "Normal", value: "normal" },
-];
+import { patientData } from "@/app/Data/patient/patient-data";
+import { tabs } from "@/app/Data/tab/tab-data";
+import { medicalData } from "@/app/Data/medical/medical-data"; // ✅ นำเข้าข้อมูลค่าทางการแพทย์
 
 const HomeWards = () => {
   const [dataTabs, setDataTabs] = useState("all");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false); // สถานะการเปิดโมดัล
-  const [modalContent, setModalContent] = useState<React.ReactNode | null>(
-    null
-  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<any | null>(null);
-  const [modalDetailTitle, setModalDetailTitle] = useState<string>("");
-  const [modalDetailContent, setModalDetailContent] = useState<string>("");
+  const [isMedicalModalOpen, setIsMedicalModalOpen] = useState(false);
+  const [selectedMedicalItem, setSelectedMedicalItem] = useState<{
+    label: string;
+    value: string;
+    details: string;
+  } | null>(null);
 
-  const handleCardClick = (patient: any) => {
+  const [openModal, setOpenModal] = useState<string | null>(null);
+
+  const handleModalToggle = (modalName: string) => {
+    setOpenModal(openModal === modalName ? null : modalName);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // ปิดโมดัล
+  };
+
+  const handleOpenMedicalModal = (item: {
+    label: string;
+    value: string;
+    details: string;
+  }) => {
+    setSelectedMedicalItem(item);
+    setIsMedicalModalOpen(true);
+  };
+
+  const handleCloseMedicalModal = () => {
+    setIsMedicalModalOpen(false);
+    setTimeout(() => setSelectedMedicalItem(null), 300);
+  };
+
+  // เพิ่มฟังก์ชั่นในการเปิด Modal แสดงรายละเอียดของผู้ป่วย
+  const handleOpenPatientModal = (patient: any) => {
     setSelectedPatient(patient);
-    setModalContent(
-      <div>
-        <h2>{patient.name}</h2>
-        <p>  <strong>Date:</strong> {patient.date} </p>
-        <p>  <strong>HN:</strong> {patient.hn} </p>
-        <p>  <strong>Status:</strong> {patient.status} </p>
-      </div>
-    );
-    setIsModalOpen(true); // เปิดโมดัล
+    setIsModalOpen(true); // เปิด Modal ของผู้ป่วย
   };
 
-  const handleCloseModal = () => { setIsModalOpen(false); // ปิดโมดัล
-    const handleOpenDetailModal = (label: string, value: string) => {
-      setModalDetailTitle(label);
-      setModalDetailContent(value);
-      setIsModalOpen(true);
-    };
-
-    const handleCloseDetailModal = () => {  setIsModalOpen(false);
-    };
-    throw new Error("Function not implemented.");
+  // ฟังก์ชั่นในการเปิดโมดัลตามประเภทการแพทย์
+  const handleOpenMedicalModalByLabel = (item: {
+    label: string;
+    value: string;
+    details: string;
+  }) => {
+    switch (item.label) {
+      case "Symptom":
+        setOpenModal("healthData");
+        break;
+      case "Temperature":
+        setOpenModal("temperature");
+        break;
+      case "Blood Sugar":
+        setOpenModal("bloodSugar");
+        break;
+      case "Heart Rate":
+        setOpenModal("heartRate");
+        break;
+      case "Oxygen":
+        setOpenModal("oxygen");
+        break;
+      case "Blood Pressure":
+        setOpenModal("bloodPressure");
+        break;
+      default:
+        setOpenModal(null);
+    }
   };
-
-  function handleOpenDetailModal(label: string, value: string): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <div className="h-screen bg-white flex flex-col overflow-hidden">
@@ -90,6 +97,7 @@ const HomeWards = () => {
             isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
           }`}
         >
+          {/* 🔹 Tabs ด้านบน */}
           <div className="flex">
             <div className="flex w-96 border-b justify-start">
               {tabs.map(({ title, value }) => (
@@ -109,6 +117,7 @@ const HomeWards = () => {
             </div>
           </div>
 
+          {/* 🔹 รายชื่อผู้ป่วย */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10">
             {patientData
               .filter(
@@ -119,7 +128,7 @@ const HomeWards = () => {
                   key={index}
                   className="relative overflow-hidden rounded-none border border-gray-300"
                   sx={{ boxShadow: "0 1px 3px rgba(0,0,0,0.12)" }}
-                  onClick={() => handleCardClick(patient)} // คลิกที่การ์ดเพื่อเปิดโมดัล
+                  onClick={() => handleOpenPatientModal(patient)}
                 >
                   <div className="absolute top-0 right-0 w-16 h-16">
                     <div
@@ -135,7 +144,7 @@ const HomeWards = () => {
                   </div>
                   <div className="flex items-center p-4">
                     <img
-                      src="https://shorturl.asia/QNoP1"
+                      src="https://i.pinimg.com/1200x/b6/27/a0/b627a0dd92e5fbe11d13b856eebe7a56.jpg"
                       alt="profile"
                       className="w-28 h-28 rounded-full mr-4"
                     />
@@ -153,99 +162,128 @@ const HomeWards = () => {
               ))}
           </div>
         </div>
-      </div>
 
-      {/* โมดัล */}
-      <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 1100,
-            height: 500,
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            padding: 3,
-            boxShadow: 24,
-          }}
-        >
-          <div className="flex space-x-14 text-sm text-gray-500">
-            {/* 🔹 ฝั่งซ้าย: ข้อมูลผู้ป่วย */}
-            <div className="w-64 h-96 flex flex-col items-center p-4 border-r ">
-              {/* รูปอยู่ตรงกลาง */}
-              <img
-                src="https://shorturl.asia/QNoP1"
-                alt="patient profile"
-                className="w-40 h-40 rounded-full border"
-              />
+        {/* โมดัล */}
+        <Modal open={isModalOpen} onClose={handleCloseModal}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 1100,
+              height: 500,
+              bgcolor: "background.paper",
+              borderRadius: 2,
+              padding: 3,
+              boxShadow: 24,
+            }}
+          >
+            <div className="flex space-x-14 text-sm text-gray-500">
+              {/* 🔹 ฝั่งซ้าย: ข้อมูลผู้ป่วย */}
+              <div className="w-64 h-96 flex flex-col items-center p-4 border-r ">
+                {/* รูปอยู่ตรงกลาง */}
+                <img
+                  src="https://shorturl.asia/QNoP1"
+                  alt="patient profile"
+                  className="w-40 h-40 rounded-full border"
+                />
 
-              {/* ข้อความชิดซ้าย */}
-              <div className="text-left w-full mt-4 space-y-2 text-sm">
-                <h2 className="text-base font-semibold mt-5">
-                  {selectedPatient?.name}
-                </h2>
-                <p>TEL: {selectedPatient?.number || "069998555"}</p>
-                <p>HN: {selectedPatient?.hn}</p>
-                <p>Weight: {selectedPatient?.weight || "52 kg"}</p>
+                {/* ข้อความชิดซ้าย */}
+                <div className="text-left w-full mt-4 space-y-2 text-sm">
+                  <h2 className="text-base font-semibold mt-5">
+                    {selectedPatient?.name}
+                  </h2>
+                  <p>TEL: {selectedPatient?.number || "069998555"}</p>
+                  <p>HN: {selectedPatient?.hn}</p>
+                  <p>Weight: {selectedPatient?.weight || "52 kg"}</p>
+                </div>
+              </div>
+
+              {/* 🔹 ฝั่งขวา: ค่าทางการแพทย์ */}
+              <div className="w-2/3 grid grid-cols-2 gap-6">
+                {medicalData.map((item) => (
+                  <div
+                    key={item.label}
+                    className="p-3 border rounded-lg shadow-sm cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleOpenMedicalModalByLabel(item)}
+                  >
+                    <p className="text-sm text-gray-500">{item.label}</p>
+                    <p className="text-lg font-semibold">{item.value}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* 🔹 ฝั่งขวา: ค่าทางการแพทย์ */}
-            <div className="w-2/3 grid grid-cols-2 gap-6 ">
-              {[
-                { label: "Symptom", value: "Coughing" },
-                { label: "Temperature", value: "37.5°C" },
-                { label: "Blood Sugar", value: "120 mg/dL" },
-                { label: "Heart Rate", value: "80 bpm" },
-                { label: "Oxygen", value: "98%" },
-                { label: "Blood Pressure", value: "120/80 mmHg" },
-              ].map((item) => (
-                <div key={item.label} className="p-3 border rounded-lg shadow-sm" >
-                  <p className="text-sm text-gray-500">{item.label}</p>
-                  <p className="text-lg font-semibold">{item.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+            {/* 🔹 ปุ่ม Close */}
+            <button
+              onClick={handleCloseModal}
+              className="mt-10 mr-4 text-red-500 font-semibold float-right"
+            >
+              {" "}
+              Close{" "}
+            </button>
+          </Box>
+        </Modal>
 
-          {/* 🔹 ปุ่ม Close */}
-          <button
-            onClick={handleCloseModal}
-            className="mt-10 mr-4 text-red-500 font-semibold float-right"
-          >
-            {" "}
-            Close{" "}
-          </button>
-        </Box>
-      </Modal>
-
-      {/* 🔹 โมดัลสำหรับดูรายละเอียดเพิ่มเติม 
-      <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            padding: 3,
-            boxShadow: 24,
-          }}
+        {/* โมดัลที่เปิดตามค่าทางการแพทย์ */}
+        <Modal
+          open={openModal === "healthData"}
+          onClose={() => setOpenModal(null)}
         >
-          <h2 className="text-lg font-semibold">{modalDetailTitle}</h2>
-          <p className="mt-2">{modalDetailContent}</p>
-          <button
-            onClick={handleCloseModal}
-            className="mt-4 text-blue-500"
-          >
-            Close
-          </button>
-        </Box>
-      </Modal>*/}
+          <HealthData
+            isOpen={openModal === "healthData"}
+            onClose={() => setOpenModal(null)}
+          />
+        </Modal>
+
+        <Modal
+          open={openModal === "temperature"}
+          onClose={() => setOpenModal(null)}
+        >
+          <TemperatureModal
+            isOpen={openModal === "temperature"}
+            onClose={() => setOpenModal(null)}
+          />
+        </Modal>
+
+        <Modal
+          open={openModal === "bloodSugar"}
+          onClose={() => setOpenModal(null)}
+        >
+          <BloodSugarModal
+            isOpen={openModal === "bloodSugar"}
+            onClose={() => setOpenModal(null)}
+          />
+        </Modal>
+
+        <Modal
+          open={openModal === "heartRate"}
+          onClose={() => setOpenModal(null)}
+        >
+          <HeartRateModal
+            isOpen={openModal === "heartRate"}
+            onClose={() => setOpenModal(null)}
+          />
+        </Modal>
+
+        <Modal open={openModal === "oxygen"} onClose={() => setOpenModal(null)}>
+          <OxygenModal
+            isOpen={openModal === "oxygen"}
+            onClose={() => setOpenModal(null)}
+          />
+        </Modal>
+
+        <Modal
+          open={openModal === "bloodPressure"}
+          onClose={() => setOpenModal(null)}
+        >
+          <BloodPressureModal
+            isOpen={openModal === "bloodPressure"}
+            onClose={() => setOpenModal(null)}
+          />
+        </Modal>
+      </div>
     </div>
   );
 };

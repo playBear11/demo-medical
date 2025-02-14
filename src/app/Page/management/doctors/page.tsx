@@ -4,45 +4,7 @@ import { useState } from "react";
 import Nav from "@/app/Components/nav";
 import Menu from "@/app/Components/menu";
 import { FilePenLine } from "lucide-react";
-
-interface Doctor {
-  name: string;
-  username: string;
-  hospital: string;
-  gender: string;
-  avatar: string;
-}
-
-const doctors: Doctor[] = [
-  {
-    name: "Dr. John Doe",
-    username: "john doe",
-    hospital: "Hospital A",
-    gender: "Male",
-    avatar: "https://shorturl.asia/z7ZR2",
-  },
-  {
-    name: "Dr. Jane Smith",
-    username: "jane smith",
-    hospital: "Hospital B",
-    gender: "Female",
-    avatar: "https://shorturl.asia/z7ZR2",
-  },
-  {
-    name: "Dr. Mike Johnson",
-    username: "mike johnson",
-    hospital: "Hospital C",
-    gender: "Male",
-    avatar: "https://shorturl.asia/z7ZR2",
-  },
-  {
-    name: "Dr. Sarah Lee",
-    username: "sarah lee",
-    hospital: "Hospital D",
-    gender: "Female",
-    avatar: "https://shorturl.asia/z7ZR2",
-  },
-];
+import { Doctor, localDoctors } from "@/app/Data/doctor/doctor-data";
 
 const Doctors = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -111,7 +73,7 @@ const Doctors = () => {
               </tr>
             </thead>
             <tbody>
-              {doctors.map((doctor, index) => (
+              {localDoctors.map((doctor, index) => (
                 <tr key={index} className="hover:bg-gray-50 text-xs  text-gray-600 text-center p-2">
                   <td className="p-2 flex justify-center items-center">
                     <img

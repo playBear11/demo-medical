@@ -3,59 +3,23 @@ import React, { use, useEffect, useState } from "react";
 import Nav from "@/app/Components/nav";
 import Menu from "@/app/Components/menu";
 import AddModal from "@/app/Components/modal/add";
-import DeleteModal from "@/app/Components/modal/delete";
 import EditUserModal from "@/app/Components/modal/edituser";
-
 import clsx from "clsx";
 import { FilePenLine, FileX } from "lucide-react";
+import { defaultUsers, } from "@/app/Data//users/users-data"; // นำเข้าข้อมูลจาก data/users
+import type { Users } from "@/app/Data//users/users-data";
+import { defaultTabs, Tab } from "@/app/Data//users/users-tabs";
 
-interface Users {
-  id: any;
-  profile: string;
-  HN_Number: string;
-  name: string;
-  ID_Card: string;
-  gender: string;
-}
+
+
 
 const Users = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ควบคุม Sidebar
-  // ตัวอย่างข้อมูลผู้ใช้ (users)
-  const [users, setUsers] = useState<Users[]>([
-    {
-      profile: "https://github.com/shadcn.png",
-      HN_Number: "1255555",
-      name: "macros",
-      ID_Card: "********",
-      gender: "Male",
-      id: undefined,
-    },
-    {
-      profile: "https://github.com/shadcn.png",
-      HN_Number: "1255556",
-      name: "maxy",
-      ID_Card: "********",
-      gender: "Female",
-      id: undefined,
-    },
-    {
-      profile: "https://github.com/shadcn.png",
-      HN_Number: "1255557",
-      name: "macro",
-      ID_Card: "********",
-      gender: "Male",
-      id: undefined,
-    },
-    {
-      profile: "https://github.com/shadcn.png",
-      HN_Number: "1255558",
-      name: "macy",
-      ID_Card: "********",
-      gender: "Female",
-      id: undefined,
-    },
-  ]);
+  const [users, setUsers] = useState<Users[]>(defaultUsers); // ใช้ข้อมูลจาก defaultUsers
+  const [dataTabs, setDataTabs] = useState("all"); // ใช้ค่าที่ได้จาก defaultTabs
+  const tabs = defaultTabs; // นำค่า tabs มาจาก defaultTabs
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ควบคุม Sidebar
+  // ตัวอย่างข้อมูลผู้ใช้ (users
   // Code สำหรับ users และ State อื่น ๆ
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false); //Modal การเพิ่มสมาชิก
@@ -97,12 +61,13 @@ const Users = () => {
     last_name: string;
   }) => {
     const newUser: Users = {
-      id: undefined,
-      profile: "https://github.com/shadcn.png",
-      HN_Number: "1234567",
-      name: `${userData.first_name} ${userData.last_name}`,
-      ID_Card: "********",
-      gender: "Unknown",
+      id: users.length + 1, // Assuming you want to generate a new ID
+      profile: "/placeholder.svg", // Add default profile image
+      HN_Number: "HN" + (users.length + 1), // Generate a default HN_Number
+      name: `${userData.first_name} ${userData.last_name}`, // Combine first and last name
+      ID_Card: "ID" + (users.length + 1), // Generate a default ID_Card
+      gender: "Unknown", // Add default gender
+      ...userData
     };
     const updatedUsers = [...users, newUser];
     setUsers(updatedUsers); // อัปเดตสถานะของ users ด้วยอาร์เรย์ที่มีข้อมูลใหม่ (updatedUsers)
@@ -142,13 +107,6 @@ const Users = () => {
       setIsDeleteModalOpen(false); // ปิด modal
     }
   };
-
-  const [dataTabs, setDataTabs] = useState("all");
-  const tabs = [
-    { title: "All", value: "all" },
-    { title: "อสม", value: "osm" },
-    { title: "นักบริบาล", value: "caregiver" },
-  ];
 
   return (
     <div className="h-screen bg-white flex flex-col overflow-hidden">

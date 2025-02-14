@@ -31,7 +31,7 @@ const Login = () => {
       // เอาไว้ตรวจโสบบ ว่าต้องมีค่าอะไรบ้าง เช่น ต้องมียูส ต้องใส่รหัสผ่านอย่างน้อยกี่ตัวว
       username: Yup.string().required("is required"),
       password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
+        .min(5, "Password must be at least characters")
         .required("is required"),
     }),
 
@@ -41,7 +41,7 @@ const Login = () => {
       try {
         // ส่งข้อมูล username และ password ไปยัง API
         const res = await axios.post(
-          "http://iottechgroup.dyndns.biz:18180/api/token/",
+          "http://192.168.1.94:8005/auths/login/",
           {
             username: values.username, // ใช้ค่าจากฟอร์มสำหรับ username
             password: values.password, // ใช้ค่าจากฟอร์มสำหรับ password

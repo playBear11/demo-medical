@@ -32,14 +32,15 @@ const Nav: React.FC<NavbarProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
         >
           <MenuIcon className="w-6 h-6" />
         </button>*/}
-        <div>
+        <a href="#" onClick={(e) => e.preventDefault()}>
           <img
             src="https://shorturl.asia/W1qXH"
-            alt="โลโก้"
+            alt="Click Me"
             className="h-12 mr-2"
+            onClick={() => router.push("/")}
             style={{ imageRendering: "crisp-edges" }}
           />
-        </div>
+        </a>
       </div>
 
       <div className="flex items-center space-x-4">

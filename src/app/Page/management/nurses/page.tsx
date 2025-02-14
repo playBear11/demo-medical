@@ -1,50 +1,9 @@
-"use client";
+"use client"
 import React, { useState } from "react";
 import Nav from "@/app/Components/nav";
 import Menu from "@/app/Components/menu";
 import { FilePenLine } from "lucide-react";
-
-// ข้อมูลแพทย์
-interface Nurse {
-  name: string;
-  username: string;
-  hospital: string;
-  gender: string;
-  avatar: string;
-  firstname?: string;
-  lastname?: string;
-}
-
-const nurse: Nurse[] = [
-  {
-    name: "poc",
-    username: "Nurse1",
-    hospital: "Hospital A",
-    gender: "Male",
-    avatar: "https://shorturl.asia/HOrI2",
-  },
-  {
-    name: "dako",
-    username: "Nurse2",
-    hospital: "Hospital B",
-    gender: "Female",
-    avatar: "https://shorturl.asia/HOrI2",
-  },
-  {
-    name: "fep",
-    username: "Nurse3",
-    hospital: "Hospital C",
-    gender: "Male",
-    avatar: "https://shorturl.asia/HOrI2",
-  },
-  {
-    name: "gre",
-    username: "Nurse4",
-    hospital: "Hospital D",
-    gender: "Female",
-    avatar: "https://shorturl.asia/HOrI2",
-  },
-];
+import { nurse, type Nurse } from "@/app/Data/nurse/nurses-data"; // นำเข้า data
 
 const Nurse = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -88,7 +47,7 @@ const Nurse = () => {
       const updatedNurseName = `${editedNurse.firstname} ${editedNurse.lastname}`;
 
       // อัปเดตข้อมูลแพทย์ที่เลือกใน array
-      const updatedNurses = nurse.map((nurseItem) =>
+      const updatedNurses = nurse.map((nurseItem: { username: string; }) =>
         nurseItem.username === editedNurse.username
           ? { ...editedNurse, name: updatedNurseName }
           : nurseItem
@@ -105,9 +64,7 @@ const Nurse = () => {
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar ที่ซ่อนหรือแสดง */}
         <div
-          className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-56" : "w-0"
-          }`}
+          className={`transition-all duration-300 ${isSidebarOpen ? "w-56" : "w-0"}`}
         >
           <Menu isSidebarOpen={isSidebarOpen} />
         </div>
@@ -148,7 +105,7 @@ const Nurse = () => {
               </tr>
             </thead>
             <tbody>
-              {nurse.map((nurse, index) => (
+              {nurse.map((nurse: Nurse, index: React.Key | null | undefined) => (
                 <tr key={index} className="hover:bg-gray-100 text-xs text-gray-600 text-center p-2">
                   <td className="p-2 flex justify-center items-center">
                     <img
