@@ -4,8 +4,6 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import { TextField, IconButton, InputAdornment } from "@mui/material"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
-import { FormControlLabel, Checkbox } from "@mui/material"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 
@@ -130,7 +128,7 @@ const Register = () => {
             </div>
 
 
-            <div className="mb-4 mt-4">
+            <div className="mb-4 mt-4 space-y-4">
               <TextField
                 fullWidth
                 id="username"
@@ -141,7 +139,7 @@ const Register = () => {
                 onBlur={formik.handleBlur}
                 error={formik.touched.username && Boolean(formik.errors.username)}
                 helperText={formik.touched.username && formik.errors.username}
-                sx={{ marginBottom: 2 }}
+                
               />
 
 
@@ -189,10 +187,6 @@ const Register = () => {
                   ),
                 }}
               />
-
-
-
-
             </div>
 
 

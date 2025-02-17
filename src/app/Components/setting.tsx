@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { useState,} from "react";
 import {
   AccountCircleOutlined,
   EmailOutlined,
@@ -15,6 +15,7 @@ import {
   VolumeUpOutlined,
   DoNotDisturbOutlined,
 } from "@mui/icons-material";
+import useTheme from "@/app/Hook/useTheme"; // นำเข้าฮุกที่สร้างขึ้น
 
 
 const ProfileSetting = () => {
@@ -227,38 +228,7 @@ const LanguageSettings = () => {
 
 
 const ThemeSettings = () => {
-  // ใช้ useState เพื่อเก็บสถานะของธีม (light หรือ dark)
-  const [theme, setTheme] = useState("light");
-
-
-  useEffect(() => {
-    console.log("Component mounted or theme changed");
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      console.log("Saved theme found:", savedTheme);
-      setTheme(savedTheme);
-      document.documentElement.classList.add(savedTheme);
-    } else {
-      console.log("No saved theme, using light mode");
-      document.documentElement.classList.add("light");
-    }
-  }, []);
- 
-  const toggleTheme = () => {
-    console.log("Toggling theme");
-    if (theme === "light") {
-      console.log("Switching to dark mode");
-      setTheme("dark");
-      document.documentElement.classList.replace("light", "dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      console.log("Switching to light mode");
-      setTheme("light");
-      document.documentElement.classList.replace("dark", "light");
-      localStorage.setItem("theme", "light");
-    }
-  };
-
+  const { theme, toggleTheme } = useTheme(); // ใช้ hook
 
   return (
     <div className="flex items-center space-x-4 justify-between mt-10">
@@ -288,106 +258,74 @@ const ThemeSettings = () => {
 };
 
 
-const SettingsPage = ({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const [activeTab, setActiveTab] = useState("account");
-  const [settings, setSettings] = useState({
-    username: "user123",
-    email: "",
-    password: "",
-    notificationsEnabled: false,
-    notificationSound: "default",
-    dndDuration: 0,
-    language: "en",
-    isDarkMode: false,
-  });
+interface SettingsPageProps {
+  isOpen: boolean
+  onClose: () => void
+}
 
+const SettingsPage: React.FC<SettingsPageProps> = ({ isOpen, onClose }) => {
+  const [activeTab, setActiveTab] = useState<string>("profile")
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
+
   const handleSaveSettings = () => {
-    console.log("Saving settings:", settings);
-    alert("All settings have been saved!");
-  };
+    console.log("Saving settings")
+    alert("All settings have been saved!")
+  }
 
+  const menuItems = [
+    { id: "profile", label: "Profile", icon: "👤" },
+    { id: "account", label: "Account Settings", icon: "⚙️" },
+    { id: "notifications", label: "Notifications", icon: "🔔" },
+    { id: "language", label: "Language", icon: "🌐" },
+    { id: "theme", label: "Theme", icon: "🎨" },
+  ]
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50 text-black text-xs ">
-      <div className="flex w-9/12 h-5/6 p-6 bg-blue-100 rounded-3xl shadow-lg relative">
-        <div className="flex w-full h-full p-6 bg-white rounded-3xl shadow-lg relative">
-          {/* Sidebar */}
-          <div className="w-1/4 p-4 border-r ">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white w-11/12 max-w-4xl h-5/6 rounded-lg shadow-lg flex overflow-hidden">
+        {/* Sidebar */}
+        <div className="w-1/4 bg-gray-100 p-4 border-r border-gray-200">
+          {menuItems.map((item) => (
             <button
-              onClick={() => setActiveTab("profile")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full text-left mb-4 p-2 rounded ${
+                activeTab === item.id ? "bg-blue-100" : "hover:bg-gray-200"
+              } flex items-center`}
             >
-              <PersonOutline className="mr-2" /> Profile
+              <span className="mr-2">{item.icon}</span> {item.label}
             </button>
-            <button
-              onClick={() => setActiveTab("account")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <SettingsOutlined className="mr-2" /> Account Settings
-            </button>
-            <button
-              onClick={() => setActiveTab("notifications")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <NotificationsNoneOutlined className="mr-2" /> Notifications
-            </button>
-            <button
-              onClick={() => setActiveTab("language")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <LanguageOutlined className="mr-2" /> Language
-            </button>
-            <button
-              onClick={() => setActiveTab("theme")}
-              className="w-full text-left mb-4 p-2 hover:bg-blue-100 flex items-center font-semibold"
-            >
-              <PaletteOutlined className="mr-2" /> Theme
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="w-3/4 p-6 overflow-y-auto">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-semibold">{menuItems.find((item) => item.id === activeTab)?.label}</h1>
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-800 text-2xl">
+              ✕
             </button>
           </div>
 
+          {activeTab === "profile" && <ProfileSetting />}
+          {activeTab === "account" && <AccountSettings />}
+          {activeTab === "notifications" && <NotificationsSettings />}
+          {activeTab === "language" && <LanguageSettings />}
+          {activeTab === "theme" && <ThemeSettings />}
 
-          {/* Content */}
-          <div className="w-3/4 p-6">
+          <div className="flex justify-end mt-6">
             <button
-              onClick={onClose}
-              className="absolute top-4 right-5 text-gray-500 hover:text-gray-800 text-xl "
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              onClick={handleSaveSettings}
             >
-              ✕
+              Save All Settings
             </button>
-            <h1 className="text-2xl font-semibold text-center mb-4">
-              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}{" "}
-            </h1>
-
-
-            {activeTab === "profile" && <ProfileSetting />}
-            {activeTab === "account" && <AccountSettings />}
-            {activeTab === "notifications" && <NotificationsSettings />}
-            {activeTab === "language" && <LanguageSettings />}
-            {activeTab === "theme" && <ThemeSettings />}
-
-
-            <div className=" flex justify-end mt-10">
-              <button
-                className="btn btn-outline border border-blue-400 hover:bg-blue-400  text-blue-400 hover:text-black w-60 h-10 rounded-xl mt-10"
-                onClick={handleSaveSettings}
-              >
-                Save All Settings
-              </button>
-            </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-
-export default SettingsPage;
+export default SettingsPage

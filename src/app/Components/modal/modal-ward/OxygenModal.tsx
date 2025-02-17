@@ -10,6 +10,19 @@ interface OxygenModalProps {
 const OxygenModal: React.FC<OxygenModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case "ฉุกเฉิน":
+        return "text-red-500"; // Red color for "ฉุกเฉิน"
+      case "สุ่มเสี่ยง":
+        return "text-yellow-500"; // Yellow color for "สุ่มเสี่ยง"
+      case "ปกติ":
+        return "text-green-500"; // Green color for "ปกติ"
+      default:
+        return "text-gray-500"; // Default color if status is unknown
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-2/3">
@@ -33,7 +46,7 @@ const OxygenModal: React.FC<OxygenModalProps> = ({ isOpen, onClose }) => {
                 444 Olympia Thai Plaza 2nd Fl, แขวงสามเสนนอก เขตห้วยขวาง
                 กรุงเทพมหานคร 10310, Thailand
               </td>
-              <td>ปกติ</td>
+              <td className={getStatusClass("ปกติ")}>ปกติ</td>
             </tr>
           </tbody>
         </table>

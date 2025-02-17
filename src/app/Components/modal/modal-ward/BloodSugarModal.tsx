@@ -13,11 +13,24 @@ const BloodSugarModal: React.FC<BloodSugarModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case "ฉุกเฉิน":
+        return "text-red-500"; // Red color for "ฉุกเฉิน"
+      case "สุ่มเสี่ยง":
+        return "text-yellow-500"; // Yellow color for "สุ่มเสี่ยง"
+      case "ปกติ":
+        return "text-green-500"; // Green color for "ปกติ"
+      default:
+        return "text-gray-500"; // Default color if status is unknown
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-2/3">
         <h3 className="text-xl font-semibold">Blood Sugar Details</h3>
-        <table className="mt-4 min-w-full table-auto">
+        <table className="mt-4 min-w-full table-auto border-collapse bg-white">
           <thead>
             <tr className="border p-2 text-center text-sm">
               <th>Glucos</th>
@@ -32,15 +45,21 @@ const BloodSugarModal: React.FC<BloodSugarModalProps> = ({
               <td>17</td>
               <td>2024-07-10</td>
               <td>10:51</td>
-              <td>ไม่มีข้อมูล</td>
-              <td>สุ่มเสี่ยง</td>
+              <td>
+                444 Olympia Thai Plaza 2nd Fl, แขวงสามเสนนอก เขตห้วยขวาง
+                กรุงเทพมหานคร 10310, Thailand
+              </td>
+              <td className={getStatusClass("สุ่มเสี่ยง")}>สุ่มเสี่ยง</td>
             </tr>
             <tr className="border p-2 text-xs text-center">
               <td>227</td>
               <td>2024-07-10</td>
               <td>10:48</td>
-              <td>ไม่มีข้อมูล</td>
-              <td>ฉุกเฉิน</td>
+              <td>
+                444 Olympia Thai Plaza 2nd Fl, แขวงสามเสนนอก เขตห้วยขวาง
+                กรุงเทพมหานคร 10310, Thailand
+              </td>
+              <td className={getStatusClass("ฉุกเฉิน")}>ฉุกเฉิน</td>
             </tr>
           </tbody>
         </table>

@@ -2,28 +2,18 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import {
-  Home,
   Users,
-  MessageSquare,
   Stethoscope,
-  Calendar,
   MapPinned,
   Hospital,
-  FlaskConical,
-  Speech,
   Receipt,
-  ClipboardPlus,
-  ChevronDown,
-  ChevronUp,
   CirclePlus,
   HousePlus,
-  Pill,
   Grid,
   ScanHeart,
   ContactRound,
   Clock,
 } from "lucide-react";
-
 
 import {
   Chart as ChartJS,
@@ -37,7 +27,6 @@ import {
   Legend,
 } from "chart.js";
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -49,24 +38,20 @@ ChartJS.register(
   Legend
 );
 
-
 interface MenuProps {
   isSidebarOpen: boolean;
 }
 
-
 const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
   const router = useRouter();
 
-
   const menuItems = [
     { name: "Hospital Dashboard", icon: Grid, href: "/" },
-    {name: "Home Wards", icon: HousePlus, href:"/Page/home/homewards"},
-    {name: "Health Station", icon: ScanHeart, href:"/Page/home/health"},
+    { name: "Home Wards", icon: HousePlus, href: "/Page/home/homewards" },
+    { name: "Health Station", icon: ScanHeart, href: "/Page/home/health" },
     { name: "Map", icon: MapPinned, href: "/Page/home/map" },
-    {name: "Appointment", icon: Clock, href: "/Page/home/appointment"}
+    { name: "Appointment", icon: Clock, href: "/Page/home/appointment" },
   ];
-
 
   const itemsManage = [
     { name: "Doctors", icon: Stethoscope, href: "/Page/management/doctors" },
@@ -76,16 +61,11 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
     // { name: "Staff Management", icon: Speech, href: "/home/staffmanage" },
   ];
 
-
-  const report = [
-    { name: "Report", icon: Receipt, href: "/Page/report" },
-  ];
-
+  const report = [{ name: "Report", icon: Receipt, href: "/Page/report" }];
 
   const handleNavigation = (href: string) => {
     router.push(href);
   };
-
 
   return (
     <div className="flex h-screen overflow-y-auto">
@@ -108,7 +88,6 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
                   </button>
                 </li>
               ))}
-
 
               <hr className="my-2 border-gray-300" />
               <div className="text-[9px] font-extrabold text-gray-600 mb-1">
@@ -147,6 +126,5 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
     </div>
   );
 };
-
 
 export default Menu;

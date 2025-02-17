@@ -1,8 +1,8 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation"; // ใช้สำหรับ App Router
-import { LogOut, Bell, MenuIcon, Settings } from "lucide-react";
+import { LogOut, Bell, MenuIcon, Settings as LucideSettings } from "lucide-react";
+import Settings from "./setting"; // อย่าลืมนำเข้า component Settings
 
 interface NavbarProps {
   isSidebarOpen: boolean;
@@ -19,19 +19,17 @@ const Nav: React.FC<NavbarProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
   };
 
   const handleSettings = () => {
-    setIsSettingOpen(true);
-    setIsProfileDropdownOpen(false);
+    setIsSettingOpen(true); // เปิดหน้า Settings
+    setIsProfileDropdownOpen(false); // ปิด dropdown profile
   };
+  const handleCloseSettings = () => {
+    setIsSettingOpen(false); // เปลี่ยนสถานะเมื่อกดปิด
+  };
+  
 
   return (
     <nav className="bg-indigo-200 shadow-md px-4 py-1 flex items-center justify-between">
       <div className="flex items-center">
-      {/**   <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="mr-4 text-black hover:text-blue-600"
-        >
-          <MenuIcon className="w-6 h-6" />
-        </button>*/}
         <a href="#" onClick={(e) => e.preventDefault()}>
           <img
             src="https://shorturl.asia/W1qXH"
@@ -65,7 +63,7 @@ const Nav: React.FC<NavbarProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
                 onClick={handleSettings}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
               >
-                <Settings className="inline-block w-4 h-4 mr-2" />
+                <LucideSettings className="inline-block w-4 h-4 mr-2" />
                 ตั้งค่า
               </button>
               <button
@@ -79,6 +77,16 @@ const Nav: React.FC<NavbarProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
           )}
         </div>
       </div>
+
+      {/* เพิ่มส่วนนี้เพื่อแสดงหน้า Settings เมื่อ isSettingOpen เป็น true */}
+      {isSettingOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+             <button onClick={() => setIsSettingOpen(true)}>Open Settings</button>
+             <Settings isOpen={isSettingOpen} onClose={handleCloseSettings} />
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

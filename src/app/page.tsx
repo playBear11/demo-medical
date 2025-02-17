@@ -1,8 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Nav from "./Components/nav";
-import Menu from "./Components/menu";
-//import ChatPopup from "./chat/page"
 import { useRouter } from "next/navigation";
 import { Line, Bar } from "react-chartjs-2";
 import {
@@ -13,21 +10,13 @@ import {
   FaCalendar,
   FaMoneyBill,
   FaCheckCircle,
-} from "react-icons/fa"; // นำเข้าไอคอนจาก react-icons
+} from "react-icons/fa";
+import MainLayout from "./Components/mainlayout"; // นำเข้า MainLayout
 
-
-const home = () => {
+const Home = () => {
   const router = useRouter();
-  useEffect(() => {
-    const token = localStorage.getItem("access_token"); // ดึง Token
-    if (!token) {
-      router.push("/Page/auth/login"); // ถ้าไม่มี Token ให้ไปหน้า Login
-    }
-  }, []);
-
-
-
-
+  
+  
   const [isModalOpen, setIsModalOpen] = useState(false); // สถานะการเปิด-ปิด Modal
   const [modalContent, setModalContent] = useState<string | React.ReactNode>(
     null
@@ -43,7 +32,6 @@ const home = () => {
         label: "Patients per Month", // ชื่อกราฟ
         data: [120, 150, 100, 180, 200, 250, 300], // ข้อมูลจำนวนผู้ป่วยในแต่ละเดือน
         borderColor: "rgba(75, 192, 192, 1)", // สีขอบของกราฟ
-        backgroundColor: "rgba(75, 192, 192, 0.2)", // สีพื้นหลังของกราฟ
         borderWidth: 2, // ความหนาของขอบกราฟ
       },
     ],
@@ -85,7 +73,10 @@ const home = () => {
       "Friday",
       "Saturday",
       "Sunday",
-    ], // ข้อมูลที่แสดงบนแกน X
+    ], 
+    
+    
+    // ข้อมูลที่แสดงบนแกน X
     datasets: [
       {
         label: "Daily Appointments", // ชื่อกราฟ
@@ -151,15 +142,9 @@ const home = () => {
 
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden ">
-    <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-    <div className="flex flex-1 overflow-hidden">
-      <Menu isSidebarOpen={isSidebarOpen} />
-      <div
-        className={`p-4 overflow-auto transition-all duration-300 ${
-          isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
-        }`}
-      >
+    <MainLayout> {/* ✅ ใช้ MainLayout ครอบเนื้อหา */}
+    <div className="h-screen flex flex-col">
+      <div className="p-4 mb-10 overflow-scroll"> 
           <div className=" h-64  bg-gradient-to-r from-indigo-400 via-blue-400 to-sky-300 rounded-2xl mb-5 flex justify-between items-center p-6">
             {/* ส่วนข้อความด้านซ้าย */}
             <div className="text-white">
@@ -370,9 +355,9 @@ const home = () => {
           )}
         </div>
       </div>
-    </div>
+      </MainLayout>
   );
 };
 
 
-export default home;
+export default Home;

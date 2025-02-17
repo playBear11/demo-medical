@@ -118,7 +118,7 @@ const HomeWards = () => {
           </div>
 
           {/* 🔹 รายชื่อผู้ป่วย */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-10 cursor-pointer">
             {patientData
               .filter(
                 (patient) => dataTabs === "all" || patient.status === dataTabs
@@ -126,7 +126,7 @@ const HomeWards = () => {
               .map((patient, index) => (
                 <Card
                   key={index}
-                  className="relative overflow-hidden rounded-none border border-gray-300"
+                  className="relative overflow-hidden rounded-none border border-gray-300 hover:bg-gray-100"
                   sx={{ boxShadow: "0 1px 3px rgba(0,0,0,0.12)" }}
                   onClick={() => handleOpenPatientModal(patient)}
                 >
@@ -179,7 +179,7 @@ const HomeWards = () => {
               boxShadow: 24,
             }}
           >
-            <div className="flex space-x-14 text-sm text-gray-500">
+            <div className="flex justify-center space-x-10 text-sm text-gray-500">
               {/* 🔹 ฝั่งซ้าย: ข้อมูลผู้ป่วย */}
               <div className="w-64 h-96 flex flex-col items-center p-4 border-r ">
                 {/* รูปอยู่ตรงกลาง */}
@@ -201,11 +201,11 @@ const HomeWards = () => {
               </div>
 
               {/* 🔹 ฝั่งขวา: ค่าทางการแพทย์ */}
-              <div className="w-2/3 grid grid-cols-2 gap-6">
+              <div className="w-2/3 grid grid-cols-2 gap-6 ">
                 {medicalData.map((item) => (
                   <div
                     key={item.label}
-                    className="p-3 border rounded-lg shadow-sm cursor-pointer hover:bg-gray-100"
+                    className="p-3 border rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 "
                     onClick={() => handleOpenMedicalModalByLabel(item)}
                   >
                     <p className="text-sm text-gray-500">{item.label}</p>
