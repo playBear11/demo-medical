@@ -199,132 +199,155 @@ const Patient = () => {
 
   return (
     <div className="h-screen bg-white flex flex-col overflow-hidden">
-      {/* Navigation */}
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-
-      {/* Sidebar + Content */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
+        <Menu isSidebarOpen={isSidebarOpen} />
         <div
-          className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-56" : "w-0"
+          className={`flex-1 p-6 overflow-auto transition-all duration-300 ${
+            isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
           }`}
         >
-          <Menu isSidebarOpen={isSidebarOpen} />
-        </div>
+          {/* Content */}
+          <div className="p-4 h-screen overflow-auto flex-1 transition-all duration-300">
+            <h1 className="text-2xl text-black font-bold mb-4">Patient</h1>
+            <hr />
+            <div className="flex justify-between items-center mt-8">
+              {/* Search Input */}
+              <input
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                className="p-2 border border-gray-300 rounded-lg text-gray-600 h-8 w-56 text-sm"
+                value={query}
+                onChange={handleSearch}
+              />
 
-        {/* Content */}
-        <div className="p-4 h-screen overflow-auto flex-1 transition-all duration-300">
-        <h1 className="text-2xl text-black font-bold mb-4">Patient</h1>
-        <hr />
-          <div className="flex justify-between items-center mt-8">
-            {/* Search Input */}
-            <input
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              className="p-2 border border-gray-300 rounded-lg text-gray-600 h-8 w-56 text-sm"
-              value={query}
-              onChange={handleSearch}
+              {/* Add Member Button */}
+              <button
+                onClick={() => setIsAddModalOpen(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white text-sm h-8 py-2 px-4 rounded-lg flex items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Add Member
+              </button>
+            </div>
+
+            {/* ส่วนที่ใช้แสดงตารางของผู้ใช้ */}
+            <div className=" overflow-y-auto  max-h-[450px]">
+              {/* ตารางแสดงข้อมูลผู้ใช้ */}
+              <table className="w-full divide-y divide-gray-200 mt-5">
+                {/* ส่วนหัวของตาราง */}
+                <thead className="bg-blue-300 text-black text-sm h-10">
+                  <tr className="px-6 py-3">
+                    <th scope="col">ID</th> {/* คอลัมน์ ID */}
+                    <th scope="col">Username</th> {/* คอลัมน์ Username */}
+                    <th scope="col">Email</th> {/* คอลัมน์ Email */}
+                    <th scope="col">First Name</th> {/* คอลัมน์ First Name */}
+                    <th scope="col">Last Name</th> {/* คอลัมน์ Last Name */}
+                    <th scope="col">Date Joined</th> {/* คอลัมน์ Date Joined */}
+                    <th scope="col">Actions</th> {/* คอลัมน์ Actions */}
+                  </tr>
+                </thead>
+
+                {/* ส่วนเนื้อหาของตารางที่แสดงข้อมูลผู้ใช้ */}
+                <tbody className="bg-white divide-y divide-gray-200 ">
+                  {/* วนลูปผ่านข้อมูลใน `users` และแสดงผลในแต่ละแถว */}
+                  {results.map((user) => (
+                    <tr key={user.id} className="hover:bg-gray-100">
+                      {" "}
+                      {/* ใช้ key เป็น `id` และใช้ hover เพื่อเปลี่ยนสีแถว */}
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">
+                        {user.id}
+                      </td>{" "}
+                      {/* แสดง ID */}
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">
+                        {user.username}
+                      </td>{" "}
+                      {/* แสดง Username */}
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">
+                        {user.email}
+                      </td>{" "}
+                      {/* แสดง Email */}
+                      <td className="px-6 py-2 text-black text-center text-xs">
+                        {user.first_name}
+                      </td>{" "}
+                      {/* แสดง First Name */}
+                      <td className="px-6 py-2 text-black text-center text-xs">
+                        {user.last_name}
+                      </td>{" "}
+                      {/* แสดง Last Name */}
+                      <td className="px-6 py-2 text-black text-center text-xs">
+                        {" "}
+                        {/* แสดง Date Joined โดยใช้ `toLocaleString` เพื่อแสดงเป็นรูปแบบที่อ่านได้ */}
+                        {new Date().toLocaleString("en-EN", {
+                          timeZone: "Asia/Bangkok",
+                        })}
+                      </td>
+                      <td className="px-6 py-2  text-center text-xs">
+                        <button
+                          onClick={() => openEditModal(user)}
+                          className="text-blue-600 mr-4 "
+                        >
+                          {" "}
+                          Edit{" "}
+                        </button>
+                        <button
+                          onClick={() => openDeleteModal(user)}
+                          className="text-red-600"
+                        >
+                          {" "}
+                          Delete{" "}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Modal Add User */}
+            <AddModal
+              isOpen={isAddModalOpen}
+              onClose={() => setIsAddModalOpen(false)} //callback function ที่กำหนดสิ่งที่ต้องทำเมื่อ Modal ต้องปิด
+              onSubmit={handleAddUser} // ทำการเพิ่มข้อมูล
             />
 
-            {/* Add Member Button */}
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white text-sm h-8 py-2 px-4 rounded-lg flex items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Add Member
-            </button>
+            <EditModal
+              isOpen={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)} // ปิด modal
+              user={selectedUser} // ส่งผู้ใช้ที่เลือก
+              onSubmit={(updatedUser) => {
+                // อัปเดตข้อมูลผู้ใช้
+                const updatedUsers = users.map(
+                  (user) => (user.id === updatedUser.id ? updatedUser : user) // ตรวจสอบว่า user.id ตรงกับ updatedUser.id หรือไม่
+                  // ถ้าตรงกัน จะใช้ข้อมูลใหม่ (updatedUser) แทน, ถ้าไม่ตรง จะคงข้อมูลเดิมไว้
+                );
+                setUsers(updatedUsers); // อัปเดตสถานะ users ด้วยอาร์เรย์ใหม่ที่มีการแก้ไขข้อมูลผู้ใช้
+                setResults(updatedUsers); // อัปเดตการแสดงผล result ให้ตรงกับข้อมูลที่เราแก้ไขไว้
+                setIsEditModalOpen(false); // ปิด modal
+              }}
+            />
+
+            {/* DeleteModal */}
+            <DeleteModal
+              isOpen={isDeleteModalOpen}
+              onClose={() => setIsDeleteModalOpen(false)} //callback function ที่กำหนดสิ่งที่ต้องทำเมื่อ Modal ต้องปิด
+              onDelete={handleDelete} // ทำการยืนยันการลบข้อมูล
+              user={selectedUser} // ส่งข้อมูล user ที่เลือกมา
+              handleDeleteUser={handleDeleteUser} // ฟังก์ชันการลบ
+            />
           </div>
-
-          {/* ส่วนที่ใช้แสดงตารางของผู้ใช้ */}
-          <div className=" overflow-y-auto  max-h-[450px]">
-            {/* ตารางแสดงข้อมูลผู้ใช้ */}
-            <table className="w-full divide-y divide-gray-200 mt-5">
-              {/* ส่วนหัวของตาราง */}
-              <thead className="bg-blue-300 text-black text-sm h-10">
-                <tr className="px-6 py-3" >
-                  <th scope="col">ID</th>  {/* คอลัมน์ ID */}
-                  <th scope="col">Username</th> {/* คอลัมน์ Username */}
-                  <th scope="col">Email</th>  {/* คอลัมน์ Email */}
-                  <th scope="col">First Name</th> {/* คอลัมน์ First Name */}
-                  <th scope="col">Last Name</th>    {/* คอลัมน์ Last Name */}
-                  <th scope="col">Date Joined</th>  {/* คอลัมน์ Date Joined */}
-                  <th scope="col">Actions</th>   {/* คอลัมน์ Actions */}
-                </tr>
-              </thead>
-
-              {/* ส่วนเนื้อหาของตารางที่แสดงข้อมูลผู้ใช้ */}
-              <tbody className="bg-white divide-y divide-gray-200 ">
-                {/* วนลูปผ่านข้อมูลใน `users` และแสดงผลในแต่ละแถว */}
-                {results.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-100">   {/* ใช้ key เป็น `id` และใช้ hover เพื่อเปลี่ยนสีแถว */}
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">{user.id}</td>    {/* แสดง ID */}
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">{user.username}</td>    {/* แสดง Username */}
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">{user.email}</td>   {/* แสดง Email */}
-                    <td className="px-6 py-2 text-black text-center text-xs">{user.first_name}</td>   {/* แสดง First Name */}
-                    <td className="px-6 py-2 text-black text-center text-xs">{user.last_name}</td>  {/* แสดง Last Name */}
-                    <td className="px-6 py-2 text-black text-center text-xs">  {/* แสดง Date Joined โดยใช้ `toLocaleString` เพื่อแสดงเป็นรูปแบบที่อ่านได้ */}
-                      {new Date().toLocaleString("en-EN", {  timeZone: "Asia/Bangkok", })}</td>
-                    <td className="px-6 py-2  text-center text-xs">
-                      <button
-                        onClick={() => openEditModal(user)}
-                        className="text-blue-600 mr-4 "
-                      > Edit </button>
-                      <button
-                        onClick={() => openDeleteModal(user)}
-                        className="text-red-600"
-                      >  Delete </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Modal Add User */}
-          <AddModal
-            isOpen={isAddModalOpen}
-            onClose={() => setIsAddModalOpen(false)} //callback function ที่กำหนดสิ่งที่ต้องทำเมื่อ Modal ต้องปิด
-            onSubmit={handleAddUser} // ทำการเพิ่มข้อมูล
-          />
-
-          <EditModal
-            isOpen={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)} // ปิด modal
-            user={selectedUser} // ส่งผู้ใช้ที่เลือก
-            onSubmit={(updatedUser) => {
-              // อัปเดตข้อมูลผู้ใช้
-              const updatedUsers = users.map(
-                (user) => (user.id === updatedUser.id ? updatedUser : user) // ตรวจสอบว่า user.id ตรงกับ updatedUser.id หรือไม่
-                // ถ้าตรงกัน จะใช้ข้อมูลใหม่ (updatedUser) แทน, ถ้าไม่ตรง จะคงข้อมูลเดิมไว้
-              );
-              setUsers(updatedUsers); // อัปเดตสถานะ users ด้วยอาร์เรย์ใหม่ที่มีการแก้ไขข้อมูลผู้ใช้
-              setResults(updatedUsers); // อัปเดตการแสดงผล result ให้ตรงกับข้อมูลที่เราแก้ไขไว้
-              setIsEditModalOpen(false); // ปิด modal
-            }}
-          />
-
-          {/* DeleteModal */}
-          <DeleteModal
-            isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)} //callback function ที่กำหนดสิ่งที่ต้องทำเมื่อ Modal ต้องปิด
-            onDelete={handleDelete} // ทำการยืนยันการลบข้อมูล
-            user={selectedUser} // ส่งข้อมูล user ที่เลือกมา
-            handleDeleteUser={handleDeleteUser} // ฟังก์ชันการลบ
-          />
         </div>
       </div>
     </div>

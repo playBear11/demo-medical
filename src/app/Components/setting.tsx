@@ -6,11 +6,6 @@ import {
   LockOutlined,
 } from "@mui/icons-material";
 import {
-  PersonOutline,
-  SettingsOutlined,
-  NotificationsNoneOutlined,
-  LanguageOutlined,
-  PaletteOutlined,
   NotificationsOutlined,
   VolumeUpOutlined,
   DoNotDisturbOutlined,

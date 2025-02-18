@@ -49,12 +49,14 @@ const page = () => {
 
   return (
     <div className="h-screen bg-white flex flex-col overflow-hidden">
-      <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <div className="flex">
-        <div className="w-56">
-          <Menu isSidebarOpen={isSidebarOpen} />
-        </div>
-          <div className={`p-4 h-screen overflow-auto transition-all duration-300 ${isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"}`}>
+    <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+    <div className="flex flex-1 overflow-hidden">
+      <Menu isSidebarOpen={isSidebarOpen} />
+      <div
+        className={`flex-1 p-6 overflow-auto transition-all duration-300 ${
+          isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
+        }`}
+      >
 
 
           <h1 className="text-2xl flex ml-3 text-black font-semibold mb-3">

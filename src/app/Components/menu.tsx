@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Users,
@@ -44,6 +44,7 @@ interface MenuProps {
 
 const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
   const router = useRouter();
+  const [isHovered, setIsHovered] = useState(false); // ใช้สถานะใหม่เพื่อจัดการ hover
 
   const menuItems = [
     { name: "Hospital Dashboard", icon: Grid, href: "/" },
@@ -58,7 +59,6 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
     { name: "Nurse", icon: CirclePlus, href: "/Page/management/nurses" },
     { name: "Patient", icon: Users, href: "/Page/management/patients" },
     { name: "Users", icon: ContactRound, href: "/Page/management/users" },
-    // { name: "Staff Management", icon: Speech, href: "/home/staffmanage" },
   ];
 
   const report = [{ name: "Report", icon: Receipt, href: "/Page/report" }];
@@ -70,52 +70,70 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
   return (
     <div className="flex h-screen overflow-y-auto">
       {isSidebarOpen && (
-        <aside className="bg-sky-50 p-4 h-screen w-56">
+        <aside
+          className={`bg-sky-50 p-4 h-screen transition-all duration-500 ease-in-out ${
+            isHovered ? "w-56" : "w-22" // ขยายเมื่อ hover และหดเมื่อออก
+          }`}
+          onMouseEnter={() => setIsHovered(true)} // ขยายเมื่อเคอร์เซอร์อยู่ภายใน
+          onMouseLeave={() => setIsHovered(false)} // หดเมื่อเคอร์เซอร์ออกจากเมนู
+        >
           <nav className="flex-1">
             <ul className="space-y-1.5 px-2">
               <hr className="my-2 border-gray-300" />
-              <div className="text-[9px] font-extrabold text-gray-600 -mb-1">
-                GENERAL
-              </div>
+              {isHovered && (
+                <div className="text-[9px] font-extrabold text-gray-600 mb-1">
+                  GENERAL
+                </div>
+              )}
               {menuItems.map((item) => (
                 <li key={item.name}>
                   <button
                     onClick={() => handleNavigation(item.href)}
                     className="flex items-center w-full p-2 rounded-lg text-black text-xs hover:bg-white hover:text-blue-600 transition-colors"
                   >
-                    <item.icon className="w-5 h-5 mr-2" />
-                    {item.name}
+                    <item.icon className="w-5 h-5" />
+                    {isHovered && (
+                      <span className="ml-2">{item.name}</span>
+                    )}
                   </button>
                 </li>
               ))}
 
               <hr className="my-2 border-gray-300" />
-              <div className="text-[9px] font-extrabold text-gray-600 mb-1">
-                MANAGEMENT
-              </div>
+              {isHovered && (
+                <div className="text-[9px] font-extrabold text-gray-600 mb-1">
+                  MANAGEMENT
+                </div>
+              )}
               {itemsManage.map((item) => (
                 <li key={item.name}>
                   <button
                     onClick={() => handleNavigation(item.href)}
                     className="flex items-center w-full p-2 rounded-lg text-black text-xs hover:bg-white hover:text-blue-600 transition-colors"
                   >
-                    <item.icon className="w-5 h-5 mr-3" />
-                    {item.name}
+                    <item.icon className="w-5 h-5" />
+                    {isHovered && (
+                      <span className="ml-2">{item.name}</span>
+                    )}
                   </button>
                 </li>
               ))}
               <hr className="my-2 border-gray-300" />
-              <div className="text-[9px] font-extrabold text-gray-600 mb-1">
-                REPORT
-              </div>
+              {isHovered && (
+                <div className="text-[9px] font-extrabold text-gray-600 mb-1">
+                  REPORT
+                </div>
+              )}
               {report.map((item) => (
                 <li key={item.name}>
                   <button
                     onClick={() => handleNavigation(item.href)}
                     className="flex items-center w-full p-2 rounded-lg text-black text-xs hover:bg-white hover:text-blue-600 transition-colors"
                   >
-                    <item.icon className="w-5 h-5 mr-3" />
-                    {item.name}
+                    <item.icon className="w-5 h-5" />
+                    {isHovered && (
+                      <span className="ml-2">{item.name}</span>
+                    )}
                   </button>
                 </li>
               ))}

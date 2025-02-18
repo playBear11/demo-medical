@@ -1,8 +1,14 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // ใช้สำหรับ App Router
-import { LogOut, Bell, MenuIcon, Settings as LucideSettings } from "lucide-react";
-import Settings from "./setting"; // อย่าลืมนำเข้า component Settings
+import { useRouter } from "next/navigation";
+import {
+  LogOut,
+  Bell,
+  MenuIcon,
+  Settings as LucideSettings,
+} from "lucide-react";
+import Settings from "./setting";
+import Notification from "./Notification";
 
 interface NavbarProps {
   isSidebarOpen: boolean;
@@ -12,20 +18,22 @@ interface NavbarProps {
 const Nav: React.FC<NavbarProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const router = useRouter(); // ใช้ Next.js Router
+  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
+    useState(false); // สถานะสำหรับ Notification
+  const router = useRouter();
 
   const handleLogout = () => {
-    router.push("/Page/auth/login"); // เปลี่ยนเส้นทางไปยังหน้า Login
+    router.push("/Page/auth/login");
   };
 
   const handleSettings = () => {
-    setIsSettingOpen(true); // เปิดหน้า Settings
-    setIsProfileDropdownOpen(false); // ปิด dropdown profile
+    setIsSettingOpen(true);
+    setIsProfileDropdownOpen(false);
   };
+
   const handleCloseSettings = () => {
-    setIsSettingOpen(false); // เปลี่ยนสถานะเมื่อกดปิด
+    setIsSettingOpen(false);
   };
-  
 
   return (
     <nav className="bg-indigo-200 shadow-md px-4 py-1 flex items-center justify-between">
@@ -42,10 +50,24 @@ const Nav: React.FC<NavbarProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
       </div>
 
       <div className="flex items-center space-x-4">
-        <button className="text-gray-600 hover:text-blue-600">
-          <Bell className="w-6 h-6" />
-        </button>
+        {/* ไอคอนแจ้งเตือน */}
+        <div className="relative">
+          <button
+            onClick={() =>
+              setIsNotificationDropdownOpen(!isNotificationDropdownOpen)
+            } // เปลี่ยนสถานะการเปิดปิดของ Notification
+            className="text-gray-600 hover:text-blue-600"
+          >
+            <Bell className="w-6 h-6" />
+          </button>
+          {isNotificationDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-72 bg-blue-50 rounded-xl shadow-lg py-1 z-10">
+              <Notification />
+            </div>
+          )}
+        </div>
 
+        {/* Profile Dropdown */}
         <div className="relative">
           <button
             onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
@@ -78,12 +100,13 @@ const Nav: React.FC<NavbarProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </div>
       </div>
 
-      {/* เพิ่มส่วนนี้เพื่อแสดงหน้า Settings เมื่อ isSettingOpen เป็น true */}
       {isSettingOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-             <button onClick={() => setIsSettingOpen(true)}>Open Settings</button>
-             <Settings isOpen={isSettingOpen} onClose={handleCloseSettings} />
+            <button onClick={() => setIsSettingOpen(true)}>
+              Open Settings
+            </button>
+            <Settings isOpen={isSettingOpen} onClose={handleCloseSettings} />
           </div>
         </div>
       )}

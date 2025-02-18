@@ -30,69 +30,64 @@ const Appointment = () => {
 
   return (
     <div className="h-screen bg-white flex flex-col overflow-hidden">
-      {/* Navigation */}
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-
-      {/* Sidebar + Content */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
+        <Menu isSidebarOpen={isSidebarOpen} />
         <div
-          className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-56" : "w-0"
+          className={`flex-1 p-6 overflow-auto transition-all duration-300 ${
+            isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
           }`}
         >
-          <Menu isSidebarOpen={isSidebarOpen} />
-        </div>
+          {/* Content */}
+          <div className="flex-1 p-4 transition-all duration-300">
+            <h2 className="text-xl font-semibold  mb-10 text-black">
+              Appointment
+            </h2>
+            {/**  <hr />*/}
 
-        {/* Content */}
-        <div className="flex-1 p-4 transition-all duration-300">
-          <h2 className="text-xl font-semibold  mb-10 text-black">
-            Appointment
-          </h2>
-          {/**  <hr />*/}
-
-          <div className="flex">
-            <div className="flex w-2/5 border-b justify-start ">
-              {tabs.map(({ title, value }) => (
-                <span
-                  key={value}
-                  onClick={() => setDataTabs(value)}
-                  className={clsx(
-                    "cursor-pointer flex-1 py-2 text-center text-sm font-medium transition-colors",
-                    value === dataTabs
-                      ? "border-b-4 border-blue-500 text-blue-700"
-                      : "text-gray-500 hover:text-blue-500"
-                  )}
-                >
-                  {title}
-                </span>
-              ))}
+            <div className="flex">
+              <div className="flex w-2/5 border-b justify-start ">
+                {tabs.map(({ title, value }) => (
+                  <span
+                    key={value}
+                    onClick={() => setDataTabs(value)}
+                    className={clsx(
+                      "cursor-pointer flex-1 py-2 text-center text-sm font-medium transition-colors",
+                      value === dataTabs
+                        ? "border-b-4 border-blue-500 text-blue-700"
+                        : "text-gray-500 hover:text-blue-500"
+                    )}
+                  >
+                    {title}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <table className="min-w-full table-auto border-collapse border">
-            <thead>
-              <tr className="bg-blue-300 rounded-lg text-black">
-                <th className="px-4 py-2 border-b">Profile</th>
-                <th className="px-4 py-2 border-b">Name</th>
-                <th className="px-4 py-2 border-b">ID Card Number</th>
-                <th className="px-4 py-2 border-b">Status</th>
-                <th className="px-4 py-2 border-b">Date & Time</th>
-                <th className="px-4 py-2 border-b">Meet</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="text-black text-xs text-center">
-                <td className="px-4 py-2 border-b"> </td>
-                <td className="px-4 py-2 border-b">John Doe</td>
-                <td className="px-4 py-2 border-b">123456789</td>
-                <td className="px-4 py-2 border-b">Active</td>
-                <td className="px-4 py-2 border-b">2025-02-10 14:00</td>
-                <td className="px-4 py-2 border-b">Zoom</td>
-              </tr>
-              {/* Repeat the above <tr> block for more rows */}
-            </tbody>
-          </table>
+            <table className="min-w-full table-auto border-collapse border">
+              <thead>
+                <tr className="bg-blue-300 rounded-lg text-black">
+                  <th className="px-4 py-2 border-b">Profile</th>
+                  <th className="px-4 py-2 border-b">Name</th>
+                  <th className="px-4 py-2 border-b">ID Card Number</th>
+                  <th className="px-4 py-2 border-b">Status</th>
+                  <th className="px-4 py-2 border-b">Date & Time</th>
+                  <th className="px-4 py-2 border-b">Meet</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="text-black text-xs text-center">
+                  <td className="px-4 py-2 border-b"> </td>
+                  <td className="px-4 py-2 border-b">John Doe</td>
+                  <td className="px-4 py-2 border-b">123456789</td>
+                  <td className="px-4 py-2 border-b">Active</td>
+                  <td className="px-4 py-2 border-b">2025-02-10 14:00</td>
+                  <td className="px-4 py-2 border-b">Zoom</td>
+                </tr>
+                {/* Repeat the above <tr> block for more rows */}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

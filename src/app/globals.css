@@ -22,4 +22,15 @@ body {
 .MuiCardHeader-root {
   visibility: visible; /* ตรวจสอบให้มั่นใจว่าไม่ถูกซ่อน */
 }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
 
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* สีเทาอ่อน */
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9; /* สีพื้นหลัง */
+}

@@ -6,12 +6,9 @@ import AddModal from "@/app/Components/modal/add";
 import EditUserModal from "@/app/Components/modal/edituser";
 import clsx from "clsx";
 import { FilePenLine, FileX } from "lucide-react";
-import { defaultUsers, } from "@/app/Data//users/users-data"; // นำเข้าข้อมูลจาก data/users
+import { defaultUsers } from "@/app/Data//users/users-data"; // นำเข้าข้อมูลจาก data/users
 import type { Users } from "@/app/Data//users/users-data";
 import { defaultTabs, Tab } from "@/app/Data//users/users-tabs";
-
-
-
 
 const Users = () => {
   const [users, setUsers] = useState<Users[]>(defaultUsers); // ใช้ข้อมูลจาก defaultUsers
@@ -67,7 +64,7 @@ const Users = () => {
       name: `${userData.first_name} ${userData.last_name}`, // Combine first and last name
       ID_Card: "ID" + (users.length + 1), // Generate a default ID_Card
       gender: "Unknown", // Add default gender
-      ...userData
+      ...userData,
     };
     const updatedUsers = [...users, newUser];
     setUsers(updatedUsers); // อัปเดตสถานะของ users ด้วยอาร์เรย์ที่มีข้อมูลใหม่ (updatedUsers)
@@ -110,160 +107,156 @@ const Users = () => {
 
   return (
     <div className="h-screen bg-white flex flex-col overflow-hidden">
-      {/* Navigation */}
       <Nav isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-
-      {/* Sidebar + Content */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
+        <Menu isSidebarOpen={isSidebarOpen} />
         <div
-          className={`transition-all duration-300 ${
-            isSidebarOpen ? "w-56" : "w-0"
+          className={`flex-1 p-6 overflow-auto transition-all duration-300 ${
+            isSidebarOpen ? "w-[calc(100%-14rem)]" : "w-full"
           }`}
         >
-          <Menu isSidebarOpen={isSidebarOpen} />
-        </div>
-        {/* Content */}
-        <div className="p-4 h-screen overflow-auto flex-1 transition-all duration-300">
-          <h1 className="text-2xl text-black font-bold mb-4">User</h1>
-          <div className="flex justify-between items-center mt-8">
-            {/* Search Input */}
-            <input
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              className="p-2 border border-gray-300 rounded-lg text-gray-600 h-8 w-56 text-sm"
-              value={query} // กำหนดค่าเริ่มต้นให้ช่องค้นหาเป็นค่าของ state `searchQuery`
-              onChange={handleSearch} // ใช้ฟังก์ชัน handleSearch ใน onChange
+          {/* Content */}
+          <div className="p-4 h-screen overflow-auto flex-1 transition-all duration-300">
+            <h1 className="text-2xl text-black font-bold mb-4">User</h1>
+            <div className="flex justify-between items-center mt-8">
+              {/* Search Input */}
+              <input
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                className="p-2 border border-gray-300 rounded-lg text-gray-600 h-8 w-56 text-sm"
+                value={query} // กำหนดค่าเริ่มต้นให้ช่องค้นหาเป็นค่าของ state `searchQuery`
+                onChange={handleSearch} // ใช้ฟังก์ชัน handleSearch ใน onChange
+              />
+
+              {/* ปุ่ม "Add Member" ที่จะอยู่ขวาล่างของตาราง */}
+              <button
+                onClick={() => setIsAddModalOpen(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white text-sm h-8 py-2 px-4 rounded-lg flex items-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Add Member
+              </button>
+            </div>
+            <div className="flex mt-5 ">
+              <div className="flex w-48 border-b justify-start">
+                {/*การใช้ .map() วนลูป */}
+                {tabs.map(({ title, value }) => (
+                  <span //เป็นข้อความธรรมดา แต่ยังให้คลิกได้
+                    key={value}
+                    onClick={() => setDataTabs(value)} //การเปลี่ยนค่า dataTabs เมื่อคลิกแท็บ
+                    className={clsx(
+                      //การใช้ clsx ในการกำหนดคลาส CSS
+                      "cursor-pointer flex-1 py-2 text-center text-[12px] font-medium transition-colors",
+                      value === dataTabs
+                        ? "border-b-4 border-blue-500 text-blue-700" //value เท่ากับ dataTabsทำให้แท็บนั้นมีเส้นขอบด้านล่างสีฟ้าและข้อความเป็นสีน้ำเงิน
+                        : "text-gray-500 hover:text-blue-500" //value ไม่เท่ากับ dataTabsทำให้ข้อความเป็นสีเทา
+                    )}
+                  >
+                    {title}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white mt-5">
+                <thead className="bg-blue-300 text-black ">
+                  <tr>
+                    <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
+                      PROFILE
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
+                      HN-NUMBER
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
+                      NAME
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
+                      ID CARD NUMBER
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
+                      GENDER
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
+                      DETAIL
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 ">
+                  {users.map((user) => (
+                    <tr key={user.HN_Number}>
+                      <td className="px-6 py-4 justify-center flex whitespace-nowrap">
+                        <img
+                          className="h-10 w-10 rounded-full"
+                          src={user.profile || "/placeholder.svg"}
+                          alt={user.name}
+                        />
+                      </td>
+                      <td className="px-6 py-4 text-center text-gray-600 text-sm whitespace-nowrap">
+                        {user.HN_Number}
+                      </td>
+                      <td className="px-6 py-4 text-center text-gray-600 text-sm whitespace-nowrap">
+                        {user.name}
+                      </td>
+                      <td className="px-6 py-4 text-center text-gray-600 text-sm whitespace-nowrap">
+                        {user.ID_Card}
+                      </td>
+                      <td className="px-6 py-4 text-center text-gray-600 text-sm whitespace-nowrap">
+                        {user.gender}
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap space-x-3">
+                        <button
+                          className="text-blue-600 hover:text-blue-900"
+                          onClick={() => openEditModal(users)}
+                        >
+                          <FilePenLine className="h-5 w-5" />
+                        </button>
+                        <button className="text-red-600 hover:text-red-900">
+                          <FileX className="h-5 w-5" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Modal Add User */}
+            <AddModal
+              isOpen={isAddModalOpen}
+              onClose={() => setIsAddModalOpen(false)} //callback function ที่กำหนดสิ่งที่ต้องทำเมื่อ Modal ต้องปิด
+              onSubmit={handleAddUsers} // ทำการเพิ่มข้อมูล
             />
 
-            {/* ปุ่ม "Add Member" ที่จะอยู่ขวาล่างของตาราง */}
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white text-sm h-8 py-2 px-4 rounded-lg flex items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Add Member
-            </button>
+            <EditUserModal
+              isOpen={isEditUserModalOpen}
+              onClose={() => {
+                console.log("Closing modal");
+                setIsEditUserModalOpen(false);
+              }} // ปิด modal
+              user={selectedUser} // ส่งผู้ใช้ที่เลือก
+              onSubmit={(updatedUser) => {
+                const updatedUsers = users.map((user) =>
+                  user.id === updatedUser.id ? updatedUser : user
+                );
+                setUsers(updatedUsers);
+                setResults(updatedUsers);
+                setIsEditUserModalOpen(false); // ปิด modal
+              }}
+            />
           </div>
-          <div className="flex mt-5 ">
-            <div className="flex w-48 border-b justify-start">
-              {/*การใช้ .map() วนลูป */}
-              {tabs.map(({ title, value }) => (
-                <span //เป็นข้อความธรรมดา แต่ยังให้คลิกได้
-                  key={value}
-                  onClick={() => setDataTabs(value)} //การเปลี่ยนค่า dataTabs เมื่อคลิกแท็บ
-                  className={clsx(
-                    //การใช้ clsx ในการกำหนดคลาส CSS
-                    "cursor-pointer flex-1 py-2 text-center text-[12px] font-medium transition-colors",
-                    value === dataTabs
-                      ? "border-b-4 border-blue-500 text-blue-700" //value เท่ากับ dataTabsทำให้แท็บนั้นมีเส้นขอบด้านล่างสีฟ้าและข้อความเป็นสีน้ำเงิน
-                      : "text-gray-500 hover:text-blue-500" //value ไม่เท่ากับ dataTabsทำให้ข้อความเป็นสีเทา
-                  )}
-                >
-                  {title}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white mt-5">
-              <thead className="bg-blue-300 text-black ">
-                <tr>
-                  <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
-                    PROFILE
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
-                    HN-NUMBER
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
-                    NAME
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
-                    ID CARD NUMBER
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
-                    GENDER
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">
-                    DETAIL
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200 ">
-                {users.map((user) => (
-                  <tr key={user.HN_Number}>
-                    <td className="px-6 py-4 justify-center flex whitespace-nowrap">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={user.profile || "/placeholder.svg"}
-                        alt={user.name}
-                      />
-                    </td>
-                    <td className="px-6 py-4 text-center text-gray-600 text-sm whitespace-nowrap">
-                      {user.HN_Number}
-                    </td>
-                    <td className="px-6 py-4 text-center text-gray-600 text-sm whitespace-nowrap">
-                      {user.name}
-                    </td>
-                    <td className="px-6 py-4 text-center text-gray-600 text-sm whitespace-nowrap">
-                      {user.ID_Card}
-                    </td>
-                    <td className="px-6 py-4 text-center text-gray-600 text-sm whitespace-nowrap">
-                      {user.gender}
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap space-x-3">
-                      <button
-                        className="text-blue-600 hover:text-blue-900"
-                        onClick={() => openEditModal(users)}
-                      >
-                        <FilePenLine className="h-5 w-5" />
-                      </button>
-                      <button className="text-red-600 hover:text-red-900">
-                        <FileX className="h-5 w-5" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Modal Add User */}
-          <AddModal
-            isOpen={isAddModalOpen}
-            onClose={() => setIsAddModalOpen(false)} //callback function ที่กำหนดสิ่งที่ต้องทำเมื่อ Modal ต้องปิด
-            onSubmit={handleAddUsers} // ทำการเพิ่มข้อมูล
-          />
-
-          <EditUserModal
-            isOpen={isEditUserModalOpen}
-            onClose={() => {
-              console.log("Closing modal");
-              setIsEditUserModalOpen(false);
-            }} // ปิด modal
-            user={selectedUser} // ส่งผู้ใช้ที่เลือก
-            onSubmit={(updatedUser) => {
-              const updatedUsers = users.map((user) =>
-                user.id === updatedUser.id ? updatedUser : user
-              );
-              setUsers(updatedUsers);
-              setResults(updatedUsers);
-              setIsEditUserModalOpen(false); // ปิด modal
-            }}
-          />
         </div>
       </div>
     </div>
