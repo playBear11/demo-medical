@@ -10,23 +10,23 @@ import {
   FaCalendar,
   FaMoneyBill,
   FaCheckCircle,
+  FaHospital,
 } from "react-icons/fa";
 import MainLayout from "./Components/mainlayout"; // นำเข้า MainLayout
+import Calendar from "./Components/calendar"; // นำเข้า Calendar
 
 const Home = () => {
   const router = useRouter();
-  
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false); // สถานะการเปิด-ปิด Modal
   const [modalContent, setModalContent] = useState<string | React.ReactNode>(
     null
   ); // สถานะเก็บเนื้อหาของ Modal
   const [dropdownOpen, setDropdownOpen] = useState(false); // สถานะการแสดง/ซ่อน dropdown ของโปรไฟล์
 
-
   // ข้อมูลตัวอย่างสำหรับกราฟ (line chart)
   const lineChartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"], // ข้อมูลที่แสดงบนแกน X
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"], // ข้อมูลที่แสดงบนแกน
     datasets: [
       {
         label: "Patients per Month", // ชื่อกราฟ
@@ -36,58 +36,6 @@ const Home = () => {
       },
     ],
   };
-
-
-  // ข้อมูลตัวอย่างสำหรับข้อมูลสรุปของโรงพยาบาล
-  const hospitalOverview = [
-    {
-      title: "Total Patients per Department", // จำนวนผู้ป่วยทั้งหมดในแต่ละแผนก
-      value: "Cardiology: 250, Neurology: 180, Pediatrics: 300", // ข้อมูลแสดงจำนวนผู้ป่วยในแต่ละแผนก
-      description: "Current patients in each department", // คำอธิบาย
-    },
-    {
-      title: "Available Beds", // จำนวนเตียงที่ว่าง/เต็ม
-      value: "50 Available / 120 Total", // จำนวนเตียงที่ว่างและทั้งหมด
-      description: "Beds status in the hospital", // คำอธิบาย
-    },
-    {
-      title: "Medical Staff Available", // จำนวนแพทย์/พยาบาลที่พร้อมให้บริการ
-      value: "150 Doctors, 200 Nurses", // จำนวนแพทย์และพยาบาล
-      description: "Available medical staff for services", // คำอธิบาย
-    },
-    {
-      title: "Patient Satisfaction Rating", // การประเมินความพึงพอใจของผู้ป่วย
-      value: "4.5/5", // คะแนนการประเมิน
-      description: "Based on recent surveys", // คำอธิบาย
-    },
-  ];
-
-
-  // ข้อมูลตัวอย่างสำหรับกราฟ (bar chart)
-  const barChartData = {
-    labels: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ], 
-    
-    
-    // ข้อมูลที่แสดงบนแกน X
-    datasets: [
-      {
-        label: "Daily Appointments", // ชื่อกราฟ
-        data: [20, 25, 30, 35, 40, 45, 50], // ข้อมูลการนัดหมายในแต่ละวัน
-        backgroundColor: "rgba(153, 102, 255, 0.6)", // สีพื้นหลังของกราฟ
-        borderColor: "rgba(153, 102, 255, 1)", // สีขอบของกราฟ
-        borderWidth: 1, // ความหนาของขอบกราฟ
-      },
-    ],
-  };
-
 
   // ข้อมูลตัวอย่างสำหรับสถิติ
   const stats = [
@@ -117,6 +65,53 @@ const Home = () => {
     },
   ];
 
+  // ข้อมูลตัวอย่างสำหรับข้อมูลสรุปของโรงพยาบาล
+  const hospitalOverview = [
+    {
+      title: "Patient Load per Department", // จำนวนผู้ป่วยทั้งหมดในแต่ละแผนก
+      value: "Cardiology: 250, Neurology: 180, Pediatrics: 300", // ข้อมูลแสดงจำนวนผู้ป่วยในแต่ละแผนก
+      description: "Current patients in each department", // คำอธิบาย
+    },
+    {
+      title: "Beds Occupancy Rate", // จำนวนเตียงที่ว่าง/เต็ม
+      value: "50 Available / 120 Total", // จำนวนเตียงที่ว่างและทั้งหมด
+      description: "Beds status in the hospital", // คำอธิบาย
+    },
+    {
+      title: "Medical Staff on Duty", // จำนวนแพทย์/พยาบาลที่พร้อมให้บริการ
+      value: "150 Doctors, 200 Nurses", // จำนวนแพทย์และพยาบาล
+      description: "Available medical staff for services", // คำอธิบาย
+    },
+    {
+      title: "Patient Feedback", // การประเมินความพึงพอใจของผู้ป่วย
+      value: "4.5/5", // คะแนนการประเมิน
+      description: "Based on recent surveys", // คำอธิบาย
+    },
+  ];
+
+  // ข้อมูลตัวอย่างสำหรับกราฟ (bar chart)
+  const barChartData = {
+    labels: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+
+    // ข้อมูลที่แสดงบนแกน X
+    datasets: [
+      {
+        label: "Daily Appointments", // ชื่อกราฟ
+        data: [20, 25, 30, 35, 40, 45, 50], // ข้อมูลการนัดหมายในแต่ละวัน
+        backgroundColor: "rgba(153, 102, 255, 0.6)", // สีพื้นหลังของกราฟ
+        borderColor: "rgba(153, 102, 255, 1)", // สีขอบของกราฟ
+        borderWidth: 1, // ความหนาของขอบกราฟ
+      },
+    ],
+  };
 
   // ฟังก์ชันเปิด Modal
   const openModal = (content: React.ReactNode) => {
@@ -124,220 +119,216 @@ const Home = () => {
     setIsModalOpen(true); // เปิด Modal
   };
 
-
   // ฟังก์ชันปิด Modal
   const closeModal = () => {
     setModalContent(null); // ล้างเนื้อหาของ Modal
     setIsModalOpen(false); // ปิด Modal
   };
 
-
   // ฟังก์ชันเปิด/ปิด dropdown
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ควบคุม Sidebar
 
-
   return (
-    <MainLayout> {/* ✅ ใช้ MainLayout ครอบเนื้อหา */}
-    <div className="h-screen flex flex-col">
-      <div className="p-4 mb-10 overflow-scroll"> 
-          <div className=" h-64  bg-gradient-to-r from-indigo-400 via-blue-400 to-sky-300 rounded-2xl mb-5 flex justify-between items-center p-6">
-            {/* ส่วนข้อความด้านซ้าย */}
-            <div className="text-white">
-              <h1
-                className="text-white text-2xl font-extrabold px-4 py-2 ml-4"
-                style={{ fontFamily: "Dancing Script, cursive" }}
-              >
-                Good Morning
-              </h1>
-              <p
-                className="text-white px-4 ml-4 "
-                style={{ fontFamily: "Dancing Script, cursive" }}
-              >
-                Have Your Enjoyed!!
-              </p>
+    <MainLayout>
+      {/* ✅ ใช้ MainLayout ครอบเนื้อหา */}
+      <div className="min-h-screen flex  ">
+        {/* ฝั่งซ้าย (Main Content) */}
+        <div className="w-4/5  p-4">
+          <div className="mb-10">
+            {/* Gradient Banner */}
+            <div className="h-64 bg-gradient-to-r from-indigo-400 via-blue-400 to-sky-300 rounded-2xl mb-5 flex justify-between items-center p-6">
+              <div className="text-white">
+                <h1
+                  className="text-white text-2xl font-extrabold px-4 py-2 ml-4"
+                  style={{ fontFamily: "Dancing Script, cursive" }}
+                >
+                  Good Morning
+                </h1>
+                <p
+                  className="text-white px-4 ml-4"
+                  style={{ fontFamily: "Dancing Script, cursive" }}
+                >
+                  Have Your Enjoyed!!
+                </p>
+              </div>
+              <img
+                src="https://png.pngtree.com/png-vector/20221119/ourmid/pngtree-smiling-male-doctor-with-stethoscope-png-image_6471575.png"
+                alt="Doctor Illustration"
+                className="h-64"
+              />
             </div>
 
+            {/* Statistics Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+              {stats.map((stat, index) => (
+                <div
+                  key={index}
+                  className="p-2 shadow-md rounded-lg border bg-white flex flex-col justify-between h-full"
+                >
+                  <div className="flex items-center m-2 h-20">
+                    {/* แสดงไอคอน */}
+                    {stat.title === "New Patients" && (
+                      <FaUsers className="text-red-600 text-2xl mr-2" />
+                    )}
+                    {stat.title === "Appointments Today" && (
+                      <FaCalendar className="text-violet-600 text-2xl mr-2" />
+                    )}
+                    {stat.title === "Total Revenue" && (
+                      <FaMoneyBill className="text-pink-600 text-2xl mr-2" />
+                    )}
+                    {stat.title === "Pending Appointments" && (
+                      <FaCheckCircle className="text-sky-600 text-2xl mr-2" />
+                    )}
 
-            {/* รูปหมอด้านขว */}
-            <img
-              src="https://png.pngtree.com/png-vector/20221119/ourmid/pngtree-smiling-male-doctor-with-stethoscope-png-image_6471575.png"
-              alt="Doctor Illustration"
-              className="h-64 "
-            />
-          </div>
-
-
-          {/* Statistics Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            {/* แสดงสถิติ */}
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className=" p-2 shadow-md rounded-lg border h-28"
-              >
-                <div className="flex items-center m-2 h-20">
-                  {/*แสดงไอคอน */}
-                  {stat.title === "New Patients" && (
-                    <FaUsers className="text-red-600 text-4xl mr-2" />
-                  )}
-                  {stat.title === "Appointments Today" && (
-                    <FaCalendar className="text-violet-600 text-4xl mr-2" />
-                  )}
-                  {stat.title === "Total Revenue" && (
-                    <FaMoneyBill className="text-pink-600 text-4xl mr-2" />
-                  )}
-                  {stat.title === "Pending Appointments" && (
-                    <FaCheckCircle className="text-sky-600 text-4xl mr-2" />
-                  )}
-
-
-                  <div>
-                    <h3 className="text-sm mx-1 font-semibold text-black ">
-                      {stat.title}
-                    </h3>
-                    <p className="text-base mx-1 text-blue-400 font-bold">
-                      {stat.value}
-                    </p>
-                    <p
-                      className={`text-xs ${
-                        stat.change.startsWith("+")
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }`}
-                    >
-                      {stat.change}
-                    </p>
-                    <button
-                      className=" text-blue-500 text-sm mx-1 hover:underline"
-                      onClick={() =>
-                        openModal(
-                          <div>
-                            <h2 className="text-xl text-black font-bold mb-4">
-                              {stat.title} Details
-                            </h2>
-                            <p className="text-lg text-gray-500">
-                              {stat.description}
-                            </p>
-                            <p className="text-2xl text-blue-400 font-bold mt-2">
-                              {stat.value}
-                            </p>
-                            <p
-                              className={`text-sm ${
-                                stat.change.startsWith("+")
-                                  ? "text-green-500"
-                                  : "text-red-500"
-                              }`}
-                            >
-                              {stat.change}
-                            </p>
-                          </div>
-                        )
-                      }
-                    >
-                      View Details {/* ปุ่มดูรายละเอียด */}
-                    </button>
+                    <div className="flex flex-col">
+                      <h3 className="text-sm mx-1 font-semibold text-black ">
+                        {stat.title}
+                      </h3>
+                      <p className="text-base mx-1 text-blue-400 font-bold">
+                        {stat.value}
+                      </p>
+                      <p
+                        className={`text-xs ${
+                          stat.change.startsWith("+")
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }`}
+                      >
+                        {stat.change}
+                      </p>
+                      <button
+                        className="mt-2 text-xs mx-1 text-blue-500 hover:underline ml-auto"
+                        onClick={() =>
+                          openModal(
+                            <div>
+                              <h2 className="text-xl text-black font-bold mb-4">
+                                {stat.title} Details
+                              </h2>
+                              <p className="text-lg text-gray-500">
+                                {stat.description}
+                              </p>
+                              <p className="text-2xl text-blue-400 font-bold mt-2">
+                                {stat.value}
+                              </p>
+                              <p
+                                className={`text-sm ${
+                                  stat.change.startsWith("+")
+                                    ? "text-green-500"
+                                    : "text-red-500"
+                                }`}
+                              >
+                                {stat.change}
+                              </p>
+                            </div>
+                          )
+                        }
+                      >
+                        View Details {/* ปุ่มดูรายละเอียด */}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
+            {/* Section: Hospital Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+              {hospitalOverview.map((overview, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-3 shadow-md rounded-lg border h-full flex flex-col justify-between"
+                >
+                  <div className="flex items-center m-2 h-20">
+                    {/* แสดงไอคอน */}
+                    {overview.title === "Patient Load per Department" && (
+                      <FaHospital className="text-blue-600 text-4xl mr-2" />
+                    )}
+                    {overview.title === "Beds Occupancy Rate" && (
+                      <FaBed className="text-orange-600 text-2xl mr-2" />
+                    )}
+                    {overview.title === "Medical Staff on Duty" && (
+                      <FaHeartbeat className="text-green-600 text-2xl mr-2" />
+                    )}
+                    {overview.title === "Patient Feedback" && (
+                      <FaStar className="text-yellow-600 text-2xl mr-2" />
+                    )}
 
-          {/* Section: Hospital Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            {/* แสดงข้อมูลสรุปของโรงพยาบาล */}
-            {hospitalOverview.map((overview, index) => (
-              <div
-                key={index}
-                className="bg-white p-3 shadow-md rounded-lg border h-28"
-              >
-                <div className="flex items-center m-2 h-20">
-                  {/* แสดงไอคอน */}
-                  {overview.title === "Total Patients per Department" && (
-                    <FaUsers className="text-orange-600 text-4xl mr-2" />
-                  )}
-                  {overview.title === "Available Beds" && (
-                    <FaBed className="text-blue-600 text-4xl mr-2" />
-                  )}
-                  {overview.title === "Medical Staff Available" && (
-                    <FaHeartbeat className="text-yellow-600 text-4xl mr-2" />
-                  )}
-                  {overview.title === "Patient Satisfaction Rating" && (
-                    <FaStar className="text-green-600 text-4xl mr-2" />
-                  )}
-
-
-                  <div>
-                    <h3 className="text-sm mx-1 font-bold text-black">
-                      {overview.title}
-                    </h3>
-                    <p className="text-xs mx-1 mt-2 text-pink-500 font-light">
-                      {overview.value}
-                    </p>
-                    <button
-                      className="mt-2 text-sm mx-1 text-blue-500 hover:underline"
-                      onClick={() =>
-                        openModal(
-                          <div>
-                            <h2 className="text-xl text-black font-bold mb-4">
-                              {overview.title} Details
-                            </h2>
-                            <p className="text-base text-gray-500">
-                              {overview.description}
-                            </p>
-                            <p className="text-sm text-sky-500 font-bold mt-2">
-                              {overview.value}
-                            </p>
-                          </div>
-                        )
-                      }
-                    >
-                      View Details {/* ปุ่มดูรายละเอียด */}
-                    </button>
+                    <div className="flex flex-col">
+                      <h3 className="text-sm mx-1 font-bold text-black">
+                        {overview.title}
+                      </h3>
+                      <p className="text-xs mx-1 mt-2 text-pink-500 font-light">
+                        {overview.value}
+                      </p>
+                      <button
+                        className="mt-2 text-xs mx-1 text-blue-500 hover:underline ml-auto"
+                        onClick={() =>
+                          openModal(
+                            <div className="text-blue-500 text-xs mx-1 hover:underline">
+                              <h2 className="text-xl text-black font-bold mb-4">
+                                {overview.title} Details
+                              </h2>
+                              <p className="text-base text-gray-500">
+                                {overview.description}
+                              </p>
+                              <p className="text-sm text-sky-500 font-bold mt-2">
+                                {overview.value}
+                              </p>
+                            </div>
+                          )
+                        }
+                      >
+                        View Details {/* ปุ่มดูรายละเอียด */}
+                      </button>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Charts Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="bg-white p-6 shadow-md rounded-lg border-2">
+                <h3 className="text-lg text-black font-semibold mb-4">
+                  Patients per Month
+                </h3>
+                <Line data={lineChartData} /> {/* แสดงกราฟ Line */}
+                <button
+                  className="mt-4 text-blue-500 hover:underline"
+                  onClick={() => openModal(<Line data={lineChartData} />)} //เปิด Modal เพื่อดูกราฟเต็ม
+                >
+                  View Full Chart
+                </button>
               </div>
-            ))}
-          </div>
 
-
-          {/* Charts Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-white p-6 shadow-md rounded-lg border-2">
-              <h3 className="text-lg text-black font-semibold mb-4">
-                Patients per Month
-              </h3>
-              <Line data={lineChartData} /> {/* แสดงกราฟ Line */}
-              <button
-                className="mt-4 text-blue-500 hover:underline"
-                onClick={() => openModal(<Line data={lineChartData} />)} //เปิด Modal เพื่อดูกราฟเต็ม
-              >
-                View Full Chart
-              </button>
-            </div>
-
-
-            <div className="bg-white p-6 shadow-md rounded-lg border-2">
-              <h3 className="text-lg text-black font-semibold mb-4">
-                Daily Appointments
-              </h3>
-              <Bar data={barChartData} /> {/* แสดงกราฟ Bar */}
-              <button
-                className="mt-4 text-blue-500 hover:underline"
-                onClick={() => openModal(<Bar data={barChartData} />)} // เปิด Modal เพื่อดูกราฟเต็ม
-              >
-                View Full Chart
-              </button>
+              <div className="bg-white p-6 shadow-md rounded-lg border-2">
+                <h3 className="text-lg text-black font-semibold mb-4">
+                  Daily Appointments
+                </h3>
+                <Bar data={barChartData} />
+                <button
+                  className="mt-4 text-blue-500 hover:underline"
+                  onClick={() => openModal(<Bar data={barChartData} />)}
+                >
+                  View Full Chart
+                </button>
+              </div>
             </div>
           </div>
+        </div>
 
+        {/* ฝั่งขวา - Calendar (w-1/5) */}
+        <div className="w-1/5 p-4 border-l">
+          <Calendar />
+        </div>
+      </div>
+     
 
-          {/* Modal */}
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
@@ -349,15 +340,14 @@ const Home = () => {
               >
                 Close
               </button>
-                </div>
-              </div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
-      </MainLayout>
+      )}
+
+    
+    </MainLayout>
   );
 };
-
 
 export default Home;

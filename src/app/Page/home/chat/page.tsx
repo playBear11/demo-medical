@@ -1,29 +1,23 @@
 "use client";
 import React, { useState } from "react";
-import {
-  MessageCircle,
-  X,
-  Send,
-  Paperclip,
-  Minus,
-  Search,
-  ArrowLeft,
-} from "lucide-react";
+import { X, Send, Paperclip, Minus, Search, ArrowLeft } from "lucide-react";
 import {
   User,
   Message,
   sampleUsers,
   initialMessages,
 } from "@/app/Data/chat/chatdata";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
 
 const FloatingChat = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeChat, setActiveChat] = useState<number | null>(null);
   const [users] = useState<User[]>(sampleUsers);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [isOpen, setIsOpen] = useState(false);
 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -55,14 +49,16 @@ const FloatingChat = () => {
     }
   };
 
+  // function setIsOpen removed to fix duplicate identifier error
+
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-8 z-50">
       {!isOpen ? (
         <button
           onClick={() => setIsOpen(true)}
           className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg flex items-center justify-center"
         >
-          <MessageCircle size={24} />
+          <FontAwesomeIcon icon={faFacebookMessenger} className="h-6 w-6" />
         </button>
       ) : (
         <div
@@ -167,32 +163,36 @@ const FloatingChat = () => {
                 </div>
               ) : (
                 <>
-                  <div className="flex-1 p-4 overflow-y-auto custom-scrollbar max-h-64">
-                    {messages
-                      .filter((msg) => msg.userId === activeChat)
-                      .map((msg) => (
-                        <div
-                          key={msg.id}
-                          className={`mb-4 flex ${
-                            msg.sender === "user"
-                              ? "justify-end"
-                              : "justify-start"
-                          }`}
-                        >
+                  <div className="flex-1 p-4 overflow-y-auto custom-scrollbar  max-h-64">
+                    {messages // แสดงข้อความทั้งหมด
+                      .filter((msg) => msg.userId === activeChat) // กรองข้อความของ user ที่เลือก
+                      .map(
+                        (
+                          msg //  แสดงข้อความ
+                        ) => (
                           <div
-                            className={`rounded-lg p-2 max-w-[80%] ${
+                            key={msg.id} // กำหนด key ให้กับแต่ละข้อความ
+                            className={`mb-4 flex ${
                               msg.sender === "user"
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-100 text-gray-800"
+                                ? "justify-end"
+                                : "justify-start"
                             }`}
                           >
-                            <p>{msg.text}</p>
-                            <span className="text-xs opacity-75">
-                              {msg.timestamp.toLocaleTimeString()}
-                            </span>
+                            <div
+                              className={`rounded-lg p-2 max-w-[80%] ${
+                                msg.sender === "user"
+                                  ? "bg-blue-500 text-white"
+                                  : "bg-gray-100 text-gray-800"
+                              }`}
+                            >
+                              <p>{msg.text}</p>
+                              <span className="text-xs opacity-75">
+                                {msg.timestamp.toLocaleTimeString()}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                   </div>
 
                   <div className="p-4 border-t">

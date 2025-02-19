@@ -1,15 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Nav from "@/app/Components/nav";
 import Menu from "@/app/Components/menu";
 import { FilePenLine } from "lucide-react";
 import { Doctor, localDoctors } from "@/app/Data/doctor/doctor-data";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
+import FloatingChat from "../../home/chat/page";
 
 const Doctors = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const openChatModal = (doctor: SetStateAction<Doctor | null>) => {
+    setSelectedDoctor(doctor);
+    setIsChatOpen(true);
+  };
 
   const openModal = (doctor: Doctor) => {
     setSelectedDoctor(doctor);
@@ -67,6 +76,7 @@ const Doctors = () => {
                   <th>Hospital</th>
                   <th>Gender</th>
                   <th>Detail</th>
+                  <th>Message</th>
                 </tr>
               </thead>
               <tbody>
@@ -92,6 +102,17 @@ const Doctors = () => {
                         className=" text-blue-400 px-3 py-1 rounded hover:text-blue-600 transition-colors"
                       >
                         <FilePenLine className="h-5 w-5" />
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => openChatModal(doctor)}
+                        className="text-blue-400 px-3 py-1 rounded hover:text-blue-600 transition-colors"
+                      >
+                        <FontAwesomeIcon
+                          icon={faFacebookMessenger}
+                          className="h-5 w-5"
+                        />
                       </button>
                     </td>
                   </tr>
@@ -199,6 +220,15 @@ const Doctors = () => {
             </div>
           </div>
         )}
+
+   {/* แสดง Floating Chat ถ้ามีการเลือก Doctor ที่ต้องการสนทนา
+        {isChatOpen && selectedDoctor && (
+          <FloatingChat
+            isVisible={isChatOpen}
+            onClose={() => setIsChatOpen(false)}
+            selectedDoctor={selectedDoctor}
+          />
+        )*/}
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <Menu isSidebarOpen={isSidebarOpen} />
   
         {/* Main Content */}
-        <main className="flex-1 p-4 bg-gray-100">
+        <main className="flex-1 p-4 bg-gray-100 min-h-screen overflow-scroll">
           {children}
           <FloatingChat /> 
         </main>

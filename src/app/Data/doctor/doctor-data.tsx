@@ -1,6 +1,7 @@
 // data.ts
 
 export interface Doctor {
+  [x: string]: number;
   name: string;
   username: string;
   hospital: string;

@@ -1,3 +1,6 @@
+import { Dispatch, SetStateAction } from "react";
+import { Doctor } from "../doctor/doctor-data";
+
 // types.ts
 export interface User {
     id: number;
@@ -75,3 +78,9 @@ export interface User {
       userId: 1,
     },
   ];
+
+ {/*  export interface FloatingChatProps {
+    selectedDoctor: number | null;
+    isVisible: boolean;
+    onClose: () => void;
+  }*/}
