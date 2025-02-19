@@ -82,7 +82,7 @@ const Doctors = () => {
               <tbody>
                 {localDoctors.map((doctor, index) => (
                   <tr
-                    key={index}
+                  key={doctor.id}
                     className="hover:bg-gray-50 text-xs  text-gray-600 text-center p-2"
                   >
                     <td className="p-2 flex justify-center items-center">
@@ -106,14 +106,14 @@ const Doctors = () => {
                     </td>
                     <td>
                       <button
-                        onClick={() => openChatModal(doctor)}
-                        className="text-blue-400 px-3 py-1 rounded hover:text-blue-600 transition-colors"
-                      >
-                        <FontAwesomeIcon
-                          icon={faFacebookMessenger}
-                          className="h-5 w-5"
-                        />
-                      </button>
+                  onClick={() => openChatModal(doctor)}
+                  className="text-blue-400 px-3 py-1 rounded hover:text-blue-600 transition-colors"
+                >
+                  <FontAwesomeIcon
+                    icon={faFacebookMessenger}
+                    className="h-5 w-5"
+                  />
+                </button>
                     </td>
                   </tr>
                 ))}
@@ -122,6 +122,17 @@ const Doctors = () => {
           </div>
         </div>
 
+
+        
+ {/* Floating Chat */}
+ {isChatOpen && selectedDoctor && (
+        <FloatingChat
+          isVisible={isChatOpen}
+          onClose={() => setIsChatOpen(false)}
+          selectedDoctor={selectedDoctor}
+        />
+      )}
+         {/*แสดง Modal สำหรับแก้ไขข้อมูล Doctor*/}
         {isModalOpen && selectedDoctor && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-white rounded-lg max-w-md w-full">
@@ -221,14 +232,7 @@ const Doctors = () => {
           </div>
         )}
 
-   {/* แสดง Floating Chat ถ้ามีการเลือก Doctor ที่ต้องการสนทนา
-        {isChatOpen && selectedDoctor && (
-          <FloatingChat
-            isVisible={isChatOpen}
-            onClose={() => setIsChatOpen(false)}
-            selectedDoctor={selectedDoctor}
-          />
-        )*/}
+  
       </div>
     </div>
   );

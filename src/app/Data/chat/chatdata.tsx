@@ -79,8 +79,8 @@ export interface User {
     },
   ];
 
- {/*  export interface FloatingChatProps {
-    selectedDoctor: number | null;
-    isVisible: boolean;
-    onClose: () => void;
-  }*/}
+ export interface FloatingChatProps {
+  isVisible: boolean;
+  onClose: () => void;
+  selectedDoctor: Doctor;
+}

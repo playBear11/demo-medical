@@ -6,11 +6,18 @@ import {
   Message,
   sampleUsers,
   initialMessages,
+  FloatingChatProps,
 } from "@/app/Data/chat/chatdata";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
 
-const FloatingChat = () => {
+const FloatingChat: React.FC<FloatingChatProps> = ({
+  isVisible,
+  onClose,
+  selectedDoctor,
+}) => {
+  if (!isVisible) return null; // ถ้าไม่เปิดแชท ให้ return null ออกไปเลย
+
   const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
