@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Nav from "@/app/Components/nav";
-import Menu from "@/app/Components/menu";
-import AddModal from "@/app/Components/modal/add";
-import DeleteModal from "@/app/Components/modal/delete";
-import EditModal from "@/app/Components/modal/edit";
+import Nav from "@/app/Components/pagecom/nav";
+import Menu from "@/app/Components/pagecom/menu";
+import AddModal from "@/app/Components/modal/addModal";
+import DeleteModal from "@/app/Components/modal/deleteModal";
+import EditModal from "@/app/Components/modal/editModal";
 
 // กำหนด Interface สำหรับ props ที่ใช้ใน  user
 interface User {

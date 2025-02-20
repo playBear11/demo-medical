@@ -7,7 +7,7 @@ import {
   MenuIcon,
   Settings as LucideSettings,
 } from "lucide-react";
-import Settings from "./setting";
+import Settings from "../modal/settingModal";
 import Notification from "./Notification";
 
 interface NavbarProps {

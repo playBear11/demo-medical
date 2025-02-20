@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/Components/modal/modal-ward/TemperatureModal.tsx"
+    "src/app/Components/modal/TemperatureModal.tsx"
   ],
   "exclude": [
     "node_modules"

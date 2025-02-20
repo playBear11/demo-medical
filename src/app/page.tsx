@@ -8,8 +8,8 @@ import { lineChartData } from "../app/Data/charts/lineChartData"
 import { barChartData } from "../app/Data/charts/barChartData"
 import { iconMapping } from "../app/Data/constants/icons"
 import { stats } from "../app/Data/statdash/stats"
-import MainLayout from "./Components/mainlayout"
-import Calendar from "./Components/calendar"
+import MainLayout from "./Components/pagecom/mainlayout"
+import Calendar from "./Components/pagecom/calendar"
 
 const Home = () => {
   const router = useRouter()

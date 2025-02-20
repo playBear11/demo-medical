@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import Nav from "@/app/Components/nav";
-import Menu from "@/app/Components/menu";
+import Nav from "@/app/Components/pagecom/nav";
+import Menu from "@/app/Components/pagecom/menu";
 import { FilePenLine } from "lucide-react";
 import { nurse, type Nurse } from "@/app/Data/nurse/nurses-data"; // นำเข้า data
 

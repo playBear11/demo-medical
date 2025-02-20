@@ -6,8 +6,8 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
-import Nav from "@/app/Components/nav";
-import Menu from "@/app/Components/menu";
+import Nav from "@/app/Components/pagecom/nav";
+import Menu from "@/app/Components/pagecom/menu";
 
 //ข้อมูลตัวอย่างสำหรับพื้นที่ที่คนไข้อยู่
 const locations = [

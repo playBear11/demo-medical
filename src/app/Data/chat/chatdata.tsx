@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import { Doctor } from "../doctor/doctor-data";
 
 // types.ts

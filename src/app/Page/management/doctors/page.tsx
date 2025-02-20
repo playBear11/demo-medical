@@ -1,8 +1,8 @@
 "use client";
 
 import { SetStateAction, useState } from "react";
-import Nav from "@/app/Components/nav";
-import Menu from "@/app/Components/menu";
+import Nav from "@/app/Components/pagecom/nav";
+import Menu from "@/app/Components/pagecom/menu";
 import { FilePenLine } from "lucide-react";
 import { Doctor, localDoctors } from "@/app/Data/doctor/doctor-data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -80,10 +80,10 @@ const Doctors = () => {
                 </tr>
               </thead>
               <tbody>
-                {localDoctors.map((doctor, index) => (
+                {localDoctors.map((doctor) => (
                   <tr
-                    key={doctor.id}
-                    className="hover:bg-gray-50 text-xs  text-gray-600 text-center p-2"
+                    key={doctor.id} // ✅ ใช้ ID เป็น key
+                    className="hover:bg-gray-50 text-xs text-gray-600 text-center p-2"
                   >
                     <td className="p-2 flex justify-center items-center">
                       <img
@@ -135,7 +135,6 @@ const Doctors = () => {
 
         {/* -------------------------------------------- */}
 
-        
         {/*แสดง Modal สำหรับแก้ไขข้อมูล Doctor*/}
         {isModalOpen && selectedDoctor && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">

@@ -1,15 +1,15 @@
 "use client";
 import { useState } from "react";
 import { Card, Modal, Box } from "@mui/material";
-import Nav from "@/app/Components/nav";
-import Menu from "@/app/Components/menu";
+import Nav from "@/app/Components/pagecom/nav";
+import Menu from "@/app/Components/pagecom/menu";
 
-import HealthData from "@/app/Components/modal/modal-ward/Symptom";
-import TemperatureModal from "@/app/Components/modal/modal-ward/TemperatureModal";
-import BloodSugarModal from "@/app/Components/modal/modal-ward/BloodSugarModal";
-import HeartRateModal from "@/app/Components/modal/modal-ward/HeartRateModal";
-import OxygenModal from "@/app/Components/modal/modal-ward/OxygenModal";
-import BloodPressureModal from "@/app/Components/modal/modal-ward/BloodPressureModal";
+import HealthData from "@/app/Components/modal/SymptomModal";
+import TemperatureModal from "@/app/Components/modal/TemperatureModal";
+import BloodSugarModal from "@/app/Components/modal/BloodSugarModal";
+import HeartRateModal from "@/app/Components/modal/HeartRateModal";
+import OxygenModal from "@/app/Components/modal/OxygenModal";
+import BloodPressureModal from "@/app/Components/modal/BloodPressureModal";
 import clsx from "clsx";
 import { patientData } from "@/app/Data/patient/patient-data";
 import { tabs } from "@/app/Data/tab/tab-data";

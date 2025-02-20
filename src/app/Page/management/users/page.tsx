@@ -1,9 +1,9 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
-import Nav from "@/app/Components/nav";
-import Menu from "@/app/Components/menu";
-import AddModal from "@/app/Components/modal/add";
-import EditUserModal from "@/app/Components/modal/edituser";
+import Nav from "@/app/Components/pagecom/nav";
+import Menu from "@/app/Components/pagecom/menu";
+import AddModal from "@/app/Components/modal/addModal";
+import EditUserModal from "@/app/Components/modal/edituserModal";
 import clsx from "clsx";
 import { FilePenLine, FileX } from "lucide-react";
 import { defaultUsers } from "@/app/Data//users/users-data"; // นำเข้าข้อมูลจาก data/users

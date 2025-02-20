@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Nav from "./nav";
 import Menu from "./menu";
-import AuthGuard from "../Hook/authenguard";
+import AuthGuard from "../../Hook/authenguard";
 import FloatingChat from "@/app/Page/home/chat/page";
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {

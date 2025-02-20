@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Nav from "@/app/Components/nav";
-import Menu from "@/app/Components/menu";
+import Nav from "@/app/Components/pagecom/nav";
+import Menu from "@/app/Components/pagecom/menu";
 import clsx from "clsx";
 
 const tabs = [
