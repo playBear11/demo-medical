@@ -44,16 +44,16 @@ const Calendar = () => {
   return (
     <div className="w-full max-w-sm bg-ghostwhite rounded-lg shadow-sm p-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <ChevronLeft // ปุ่มกดเดือนก่อนหน้า
-          className="w-4 h-4 text-gray-500 cursor-pointer hover:text-gray-700"
+          className="w-3 h-3 text-gray-500 cursor-pointer hover:text-gray-700"
           onClick={previousMonth}
         />
-        <h2 className="text-base font-medium text-gray-800">
+        <h2 className="text-[13px] font-medium text-gray-800">
           {getMonthYear(currentDate)}       {/*แสดงเดือนและปี ปัจจุบัน*/}
         </h2>
         <ChevronRight // ปุ่มกดเดือนถัดไป
-          className="w-4 h-4 text-gray-500 cursor-pointer hover:text-gray-700"
+          className="w-3 h-3 text-gray-500 cursor-pointer hover:text-gray-700"
           onClick={nextMonth}
         />
       </div>
@@ -61,7 +61,7 @@ const Calendar = () => {
       {/* Weekdays */}
       <div className="grid grid-cols-7 gap-2 mb-2">
         {weekDays.map(day => (
-          <div key={day} className="text-[11px] text-gray-500 text-center">
+          <div key={day} className="text-[9px] text-gray-500 text-center">
             {day}
           </div>
         ))}
@@ -73,7 +73,7 @@ const Calendar = () => {
           <div 
             key={index}
             className={`
-              text-[10px] p-2 text-center rounded-full
+              text-[9px] p-1 text-center rounded-full
               ${day === null ? 'invisible' : 'cursor-pointer'}
               ${day === new Date().getDate() && 
                 currentDate.getMonth() === new Date().getMonth() && 

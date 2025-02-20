@@ -16,14 +16,14 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: "adminA",
-      password: "admin",
+      username: "nurseA", // admina,doctora , nursea , volunteera
+      password: "123", // admin,123
       rememberMe: false,
     },
     validationSchema: Yup.object({
       username: Yup.string().required("is required"),
       password: Yup.string()
-        .min(5, "Password must be at least 5 characters")
+        .min(3, "Password must be at least 3 characters")
         .required("is required"),
     }),
     onSubmit: async (values) => {

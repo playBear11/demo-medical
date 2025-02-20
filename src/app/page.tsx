@@ -1,143 +1,47 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Line, Bar } from "react-chartjs-2";
-import {
-  FaUsers,
-  FaBed,
-  FaHeartbeat,
-  FaStar,
-  FaCalendar,
-  FaMoneyBill,
-  FaCheckCircle,
-  FaHospital,
-} from "react-icons/fa";
-import MainLayout from "./Components/mainlayout"; // นำเข้า MainLayout
-import Calendar from "./Components/calendar"; // นำเข้า Calendar
+"use client"
+import type React from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+
+import { Line, Bar } from "react-chartjs-2"
+import { lineChartData } from "../app/Data/charts/lineChartData"
+import { barChartData } from "../app/Data/charts/barChartData"
+import { iconMapping } from "../app/Data/constants/icons"
+import { stats } from "../app/Data/statdash/stats"
+import MainLayout from "./Components/mainlayout"
+import Calendar from "./Components/calendar"
 
 const Home = () => {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [isModalOpen, setIsModalOpen] = useState(false); // สถานะการเปิด-ปิด Modal
-  const [modalContent, setModalContent] = useState<string | React.ReactNode>(
-    null
-  ); // สถานะเก็บเนื้อหาของ Modal
-  const [dropdownOpen, setDropdownOpen] = useState(false); // สถานะการแสดง/ซ่อน dropdown ของโปรไฟล์
+  const [isModalOpen, setIsModalOpen] = useState(false) // สถานะการเปิด-ปิด Modal
+  const [modalContent, setModalContent] = useState<string | React.ReactNode>(null) // สถานะเก็บเนื้อหาของ Modal
+  const [dropdownOpen, setDropdownOpen] = useState(false) // สถานะการแสดง/ซ่อน dropdown ของโปรไฟล์
 
-  // ข้อมูลตัวอย่างสำหรับกราฟ (line chart)
-  const lineChartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"], // ข้อมูลที่แสดงบนแกน
-    datasets: [
-      {
-        label: "Patients per Month", // ชื่อกราฟ
-        data: [120, 150, 100, 180, 200, 250, 300], // ข้อมูลจำนวนผู้ป่วยในแต่ละเดือน
-        borderColor: "rgba(75, 192, 192, 1)", // สีขอบของกราฟ
-        borderWidth: 2, // ความหนาของขอบกราฟ
-      },
-    ],
-  };
-
-  // ข้อมูลตัวอย่างสำหรับสถิติ
-  const stats = [
-    {
-      title: "New Patients", // ชื่อสถิติ
-      value: 532, // ค่า
-      change: "+12%", // การเปลี่ยนแปลง
-      description: "compared to last month", // คำอธิบาย
-    },
-    {
-      title: "Appointments Today",
-      value: 74,
-      change: "-5%",
-      description: "compared to yesterday",
-    },
-    {
-      title: "Total Revenue",
-      value: "$23,540",
-      change: "+8%",
-      description: "this month",
-    },
-    {
-      title: "Pending Appointments",
-      value: 15,
-      change: "-3%",
-      description: "currently",
-    },
-  ];
-
-  // ข้อมูลตัวอย่างสำหรับข้อมูลสรุปของโรงพยาบาล
-  const hospitalOverview = [
-    {
-      title: "Patient Load per Department", // จำนวนผู้ป่วยทั้งหมดในแต่ละแผนก
-      value: "Cardiology: 250, Neurology: 180, Pediatrics: 300", // ข้อมูลแสดงจำนวนผู้ป่วยในแต่ละแผนก
-      description: "Current patients in each department", // คำอธิบาย
-    },
-    {
-      title: "Beds Occupancy Rate", // จำนวนเตียงที่ว่าง/เต็ม
-      value: "50 Available / 120 Total", // จำนวนเตียงที่ว่างและทั้งหมด
-      description: "Beds status in the hospital", // คำอธิบาย
-    },
-    {
-      title: "Medical Staff on Duty", // จำนวนแพทย์/พยาบาลที่พร้อมให้บริการ
-      value: "150 Doctors, 200 Nurses", // จำนวนแพทย์และพยาบาล
-      description: "Available medical staff for services", // คำอธิบาย
-    },
-    {
-      title: "Patient Feedback", // การประเมินความพึงพอใจของผู้ป่วย
-      value: "4.5/5", // คะแนนการประเมิน
-      description: "Based on recent surveys", // คำอธิบาย
-    },
-  ];
-
-  // ข้อมูลตัวอย่างสำหรับกราฟ (bar chart)
-  const barChartData = {
-    labels: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ],
-
-    // ข้อมูลที่แสดงบนแกน X
-    datasets: [
-      {
-        label: "Daily Appointments", // ชื่อกราฟ
-        data: [20, 25, 30, 35, 40, 45, 50], // ข้อมูลการนัดหมายในแต่ละวัน
-        backgroundColor: "rgba(153, 102, 255, 0.6)", // สีพื้นหลังของกราฟ
-        borderColor: "rgba(153, 102, 255, 1)", // สีขอบของกราฟ
-        borderWidth: 1, // ความหนาของขอบกราฟ
-      },
-    ],
-  };
 
   // ฟังก์ชันเปิด Modal
   const openModal = (content: React.ReactNode) => {
-    setModalContent(content); // ตั้งค่าเนื้อหาของ Modal
-    setIsModalOpen(true); // เปิด Modal
-  };
+    setModalContent(content) // ตั้งค่าเนื้อหาของ Modal
+    setIsModalOpen(true) // เปิด Modal
+  }
 
   // ฟังก์ชันปิด Modal
   const closeModal = () => {
-    setModalContent(null); // ล้างเนื้อหาของ Modal
-    setIsModalOpen(false); // ปิด Modal
-  };
+    setModalContent(null) // ล้างเนื้อหาของ Modal
+    setIsModalOpen(false) // ปิด Modal
+  }
 
   // ฟังก์ชันเปิด/ปิด dropdown
   const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ควบคุม Sidebar
+    setDropdownOpen(!dropdownOpen)
+  }
 
   return (
     <MainLayout>
-      {/* ✅ ใช้ MainLayout ครอบเนื้อหา */}
-      <div className="min-h-screen flex  ">
-        {/* ฝั่งซ้าย (Main Content) */}
-        <div className="w-4/5  p-4">
+      <div className="flex min-h-screen overflow-auto">
+        {/* Main content section */}
+        <div className="w-4/5 p-4">
+        
           <div className="mb-10">
             {/* Gradient Banner */}
             <div className="h-64 bg-gradient-to-r from-indigo-400 via-blue-400 to-sky-300 rounded-2xl mb-5 flex justify-between items-center p-6">
@@ -148,10 +52,7 @@ const Home = () => {
                 >
                   Good Morning
                 </h1>
-                <p
-                  className="text-white px-4 ml-4"
-                  style={{ fontFamily: "Dancing Script, cursive" }}
-                >
+                <p className="text-white px-4 ml-4" style={{ fontFamily: "Dancing Script, cursive" }}>
                   Have Your Enjoyed!!
                 </p>
               </div>
@@ -162,143 +63,59 @@ const Home = () => {
               />
             </div>
 
-            {/* Statistics Section */}
+            {/* Updated Statistics Section with correct icon rendering */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className="p-2 shadow-md rounded-lg border bg-white flex flex-col justify-between h-full"
-                >
-                  <div className="flex items-center m-2 h-20">
-                    {/* แสดงไอคอน */}
-                    {stat.title === "New Patients" && (
-                      <FaUsers className="text-red-600 text-2xl mr-2" />
-                    )}
-                    {stat.title === "Appointments Today" && (
-                      <FaCalendar className="text-violet-600 text-2xl mr-2" />
-                    )}
-                    {stat.title === "Total Revenue" && (
-                      <FaMoneyBill className="text-pink-600 text-2xl mr-2" />
-                    )}
-                    {stat.title === "Pending Appointments" && (
-                      <FaCheckCircle className="text-sky-600 text-2xl mr-2" />
-                    )}
-
-                    <div className="flex flex-col">
-                      <h3 className="text-sm mx-1 font-semibold text-black ">
-                        {stat.title}
-                      </h3>
-                      <p className="text-base mx-1 text-blue-400 font-bold">
-                        {stat.value}
-                      </p>
-                      <p
-                        className={`text-xs ${
-                          stat.change.startsWith("+")
-                            ? "text-green-500"
-                            : "text-red-500"
-                        }`}
-                      >
-                        {stat.change}
-                      </p>
-                      <button
-                        className="mt-2 text-xs mx-1 text-blue-500 hover:underline ml-auto"
-                        onClick={() =>
-                          openModal(
-                            <div>
-                              <h2 className="text-xl text-black font-bold mb-4">
-                                {stat.title} Details
-                              </h2>
-                              <p className="text-lg text-gray-500">
-                                {stat.description}
-                              </p>
-                              <p className="text-2xl text-blue-400 font-bold mt-2">
-                                {stat.value}
-                              </p>
-                              <p
-                                className={`text-sm ${
-                                  stat.change.startsWith("+")
-                                    ? "text-green-500"
-                                    : "text-red-500"
-                                }`}
-                              >
-                                {stat.change}
-                              </p>
-                            </div>
-                          )
-                        }
-                      >
-                        View Details {/* ปุ่มดูรายละเอียด */}
-                      </button>
+              {stats.map((stat, index) => {
+                const Icon = iconMapping[stat.icon as keyof typeof iconMapping]
+                return (
+                  <div
+                    key={index}
+                    className="p-2 shadow-md rounded-lg border bg-white flex flex-col justify-between h-full"
+                  >
+                    <div className="flex items-center m-2 h-20">
+                      {Icon && <Icon className={`${stat.iconColor} w-6 h-6 mr-2`} />}
+                      <div className="flex flex-col w-full">
+                        <h3 className="text-base mt-3 font-semibold text-black">{stat.title}</h3>
+                        <p className="text-xs text-blue-400 mt-1">
+                          {Array.isArray(stat.value)
+                            ? stat.value.map((department, index) => (
+                                <span key={index}>
+                                  {department.department}: {department.patients} patients
+                                  <br />
+                                </span>
+                              ))
+                            : typeof stat.value === "object"
+                              ? Object.entries(stat.value).map(([key, val]) => (
+                                  <span key={key}>
+                                    {key}: {val}
+                                    <br />
+                                  </span>
+                                ))
+                              : stat.value}
+                        </p>
+                        <p className={`text-xs ${stat.change?.startsWith("+") ? "text-green-500" : "text-red-500"}`}>
+                          {stat.change}
+                        </p>
+                        <button
+                          className="mt-2 text-xs mx-1 text-blue-500 hover:underline ml-auto"
+                          onClick={() => openModal(<div>{stat.description}</div>)}
+                        >
+                          View Details
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Section: Hospital Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              {hospitalOverview.map((overview, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-3 shadow-md rounded-lg border h-full flex flex-col justify-between"
-                >
-                  <div className="flex items-center m-2 h-20">
-                    {/* แสดงไอคอน */}
-                    {overview.title === "Patient Load per Department" && (
-                      <FaHospital className="text-blue-600 text-4xl mr-2" />
-                    )}
-                    {overview.title === "Beds Occupancy Rate" && (
-                      <FaBed className="text-orange-600 text-2xl mr-2" />
-                    )}
-                    {overview.title === "Medical Staff on Duty" && (
-                      <FaHeartbeat className="text-green-600 text-2xl mr-2" />
-                    )}
-                    {overview.title === "Patient Feedback" && (
-                      <FaStar className="text-yellow-600 text-2xl mr-2" />
-                    )}
-
-                    <div className="flex flex-col">
-                      <h3 className="text-sm mx-1 font-bold text-black">
-                        {overview.title}
-                      </h3>
-                      <p className="text-xs mx-1 mt-2 text-pink-500 font-light">
-                        {overview.value}
-                      </p>
-                      <button
-                        className="mt-2 text-xs mx-1 text-blue-500 hover:underline ml-auto"
-                        onClick={() =>
-                          openModal(
-                            <div className="text-blue-500 text-xs mx-1 hover:underline">
-                              <h2 className="text-xl text-black font-bold mb-4">
-                                {overview.title} Details
-                              </h2>
-                              <p className="text-base text-gray-500">
-                                {overview.description}
-                              </p>
-                              <p className="text-sm text-sky-500 font-bold mt-2">
-                                {overview.value}
-                              </p>
-                            </div>
-                          )
-                        }
-                      >
-                        View Details {/* ปุ่มดูรายละเอียด */}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="bg-white p-6 shadow-md rounded-lg border-2">
-                <h3 className="text-lg text-black font-semibold mb-4">
-                  Patients per Month
-                </h3>
+                <h3 className="text-lg text-black font-semibold mb-4">Patients per Month</h3>
                 <Line data={lineChartData} /> {/* แสดงกราฟ Line */}
                 <button
-                  className="mt-4 text-blue-500 hover:underline"
+                  className="mt-4 text-blue-500 hover:underline text-end w-full"
                   onClick={() => openModal(<Line data={lineChartData} />)} //เปิด Modal เพื่อดูกราฟเต็ม
                 >
                   View Full Chart
@@ -306,12 +123,10 @@ const Home = () => {
               </div>
 
               <div className="bg-white p-6 shadow-md rounded-lg border-2">
-                <h3 className="text-lg text-black font-semibold mb-4">
-                  Daily Appointments
-                </h3>
+                <h3 className="text-lg text-black font-semibold mb-4">Daily Appointments</h3>
                 <Bar data={barChartData} />
                 <button
-                  className="mt-4 text-blue-500 hover:underline"
+                  className="mt-4 text-blue-500 hover:underline text-end w-full "
                   onClick={() => openModal(<Bar data={barChartData} />)}
                 >
                   View Full Chart
@@ -321,12 +136,11 @@ const Home = () => {
           </div>
         </div>
 
-        {/* ฝั่งขวา - Calendar (w-1/5) */}
+        {/*ส่วนของปฏิทิน */}
         <div className="w-1/5 p-4 border-l">
           <Calendar />
         </div>
       </div>
-     
 
       {/* Modal */}
       {isModalOpen && (
@@ -344,10 +158,9 @@ const Home = () => {
           </div>
         </div>
       )}
-
-    
     </MainLayout>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
+

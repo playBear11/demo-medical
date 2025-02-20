@@ -72,7 +72,7 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
       {isSidebarOpen && (
         <aside
           className={`bg-sky-50 p-4 h-screen transition-all duration-500 ease-in-out ${
-            isHovered ? "w-56" : "w-22" // ขยายเมื่อ hover และหดเมื่อออก
+            isHovered ? "w-50" : "w-22" // ขยายเมื่อ hover และหดเมื่อออก
           }`}
           onMouseEnter={() => setIsHovered(true)} // ขยายเมื่อเคอร์เซอร์อยู่ภายใน
           onMouseLeave={() => setIsHovered(false)} // หดเมื่อเคอร์เซอร์ออกจากเมนู

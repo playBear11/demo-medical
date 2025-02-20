@@ -1,35 +1,29 @@
-"use client";
-import React, { useState } from "react";
-import { X, Send, Paperclip, Minus, Search, ArrowLeft } from "lucide-react";
-import {
-  User,
-  Message,
-  sampleUsers,
-  initialMessages,
-  FloatingChatProps,
-} from "@/app/Data/chat/chatdata";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
+"use client"
+import type React from "react"
+import { useState } from "react"
+import { X, Send, Paperclip, Minus, Search, ArrowLeft, Phone, Video, PhoneOff, VideoOff } from "lucide-react"
+import { type User, type Message, sampleUsers, initialMessages, type FloatingChatProps } from "@/app/Data/chat/chatdata"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons"
 
-const FloatingChat: React.FC<FloatingChatProps> = ({
-  isVisible,
-  onClose,
-  selectedDoctor,
-}) => {
-  if (!isVisible) return null; // ถ้าไม่เปิดแชท ให้ return null ออกไปเลย
+const FloatingChat: React.FC<FloatingChatProps> = ({ isVisible, onClose }) => {
+  // Existing state
+  const [isMinimized, setIsMinimized] = useState(false)
+  const [message, setMessage] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [activeChat, setActiveChat] = useState<number | null>(null)
+  const [users] = useState<User[]>(sampleUsers)
+  const [messages, setMessages] = useState<Message[]>(initialMessages)
+  const [isOpen, setIsOpen] = useState(false)
 
-  const [isMinimized, setIsMinimized] = useState(false);
-  const [message, setMessage] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeChat, setActiveChat] = useState<number | null>(null);
-  const [users] = useState<User[]>(sampleUsers);
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [isOpen, setIsOpen] = useState(false);
+  // New state for calls
+  const [isInCall, setIsInCall] = useState(false)
+  const [isInVideoCall, setIsInVideoCall] = useState(false)
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Existing filter function
+  const filteredUsers = users.filter((user) => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
+  // Existing message handling
   const handleSendMessage = () => {
     if (message.trim() && activeChat) {
       const newMessage: Message = {
@@ -38,9 +32,9 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
         sender: "user",
         timestamp: new Date(),
         userId: activeChat,
-      };
-      setMessages([...messages, newMessage]);
-      setMessage("");
+      }
+      setMessages([...messages, newMessage])
+      setMessage("")
 
       // Simulate response
       setTimeout(() => {
@@ -50,13 +44,34 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
           sender: "other",
           timestamp: new Date(),
           userId: activeChat,
-        };
-        setMessages((prev) => [...prev, response]);
-      }, 1000);
+        }
+        setMessages((prev) => [...prev, response])
+      }, 1000)
     }
-  };
+  }
 
-  // function setIsOpen removed to fix duplicate identifier error
+  // New call handling functions
+  const handleVoiceCall = () => {
+    setIsInCall(!isInCall)
+    if (!isInCall) {
+      // Simulate starting a call
+      alert("Starting voice call...")
+    } else {
+      // Simulate ending a call
+      alert("Ending voice call...")
+    }
+  }
+
+  const handleVideoCall = () => {
+    setIsInVideoCall(!isInVideoCall)
+    if (!isInVideoCall) {
+      // Simulate starting a video call
+      alert("Starting video call...")
+    } else {
+      // Simulate ending a call
+      alert("Ending video call...")
+    }
+  }
 
   return (
     <div className="fixed bottom-4 right-8 z-50">
@@ -82,45 +97,50 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
           <div className="p-4 bg-blue-500 text-white rounded-t-lg flex justify-between items-center h-12">
             <div className="flex items-center gap-2">
               {activeChat && (
-                <button
-                  onClick={() => setActiveChat(null)}
-                  className="hover:bg-blue-600 p-1 rounded"
-                >
+                <button onClick={() => setActiveChat(null)} className="hover:bg-blue-600 p-1 rounded">
                   <ArrowLeft size={18} />
                 </button>
               )}
-              <h3 className="font-medium">
-                {activeChat
-                  ? users.find((u) => u.id === activeChat)?.name
-                  : "การสนทนา"}
-              </h3>
+              <h3 className="font-medium">{activeChat ? users.find((u) => u.id === activeChat)?.name : "Chat"}</h3>
             </div>
             <div className="flex gap-2">
-              <button
-                onClick={() => setIsMinimized(!isMinimized)}
-                className="hover:bg-blue-600 p-1 rounded"
-              >
+              {/* Add call buttons when in active chat */}
+              {activeChat && (
+                <>
+                  <button
+                    onClick={handleVoiceCall}
+                    className="hover:bg-blue-600 p-1 rounded"
+                    title={isInCall ? "End voice call" : "Start voice call"}
+                  >
+                    {isInCall ? <PhoneOff size={18} /> : <Phone size={18} />}
+                  </button>
+                  <button
+                    onClick={handleVideoCall}
+                    className="hover:bg-blue-600 p-1 rounded"
+                    title={isInVideoCall ? "End video call" : "Start video call"}
+                  >
+                    {isInVideoCall ? <VideoOff size={18} /> : <Video size={18} />}
+                  </button>
+                </>
+              )}
+              <button onClick={() => setIsMinimized(!isMinimized)} className="hover:bg-blue-600 p-1 rounded">
                 <Minus size={18} />
               </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="hover:bg-blue-600 p-1 rounded"
-              >
+              <button onClick={() => setIsOpen(false)} className="hover:bg-blue-600 p-1 rounded">
                 <X size={18} />
               </button>
             </div>
           </div>
 
+          {/* Rest of the component remains the same */}
           {!isMinimized && (
             <>
               {!activeChat ? (
+                // ... existing user list code ...
                 <div className="flex-1 flex flex-col">
                   <div className="p-3 border-b h-12 flex items-center">
                     <div className="relative w-full">
-                      <Search
-                        size={16}
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                      />
+                      <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <input
                         type="text"
                         placeholder="ค้นหา..."
@@ -140,7 +160,7 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
                       >
                         <div className="relative">
                           <img
-                            src={user.avatar}
+                            src={user.avatar || "/placeholder.svg"}
                             alt={user.name}
                             className="w-10 h-10 rounded-full"
                           />
@@ -151,13 +171,9 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
                             <h4 className="font-medium">{user.name}</h4>
-                            <span className="text-xs text-gray-500">
-                              {user.timestamp.toLocaleTimeString()}
-                            </span>
+                            <span className="text-xs text-gray-500">{user.timestamp.toLocaleTimeString()}</span>
                           </div>
-                          <p className="text-sm text-gray-500 truncate">
-                            {user.lastMessage}
-                          </p>
+                          <p className="text-sm text-gray-500 truncate">{user.lastMessage}</p>
                         </div>
                         {user.unread > 0 && (
                           <div className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -170,35 +186,33 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
                 </div>
               ) : (
                 <>
-                  <div className="flex-1 p-4 overflow-y-auto custom-scrollbar  max-h-64">
+                  {/* Add call status indicator if in a call */}
+                  {(isInCall || isInVideoCall) && (
+                    <div className="bg-green-100 text-green-800 text-sm py-1 px-4 text-center">
+                      {isInCall ? "Voice Call in Progress" : "Video Call in Progress"}
+                    </div>
+                  )}
+                  <div className="flex-1 p-4 overflow-y-auto custom-scrollbar max-h-64">
                     {messages // แสดงข้อความทั้งหมด
                       .filter((msg) => msg.userId === activeChat) // กรองข้อความของ user ที่เลือก
                       .map(
                         (
-                          msg //  แสดงข้อความ
+                          msg, //  แสดงข้อความ
                         ) => (
                           <div
                             key={msg.id} // กำหนด key ให้กับแต่ละข้อความ
-                            className={`mb-4 flex ${
-                              msg.sender === "user"
-                                ? "justify-end"
-                                : "justify-start"
-                            }`}
+                            className={`mb-4 flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                           >
                             <div
                               className={`rounded-lg p-2 max-w-[80%] ${
-                                msg.sender === "user"
-                                  ? "bg-blue-500 text-white"
-                                  : "bg-gray-100 text-gray-800"
+                                msg.sender === "user" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-800"
                               }`}
                             >
                               <p>{msg.text}</p>
-                              <span className="text-xs opacity-75">
-                                {msg.timestamp.toLocaleTimeString()}
-                              </span>
+                              <span className="text-xs opacity-75">{msg.timestamp.toLocaleTimeString()}</span>
                             </div>
                           </div>
-                        )
+                        ),
                       )}
                   </div>
 
@@ -211,16 +225,11 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
                         type="text"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        onKeyPress={(e) =>
-                          e.key === "Enter" && handleSendMessage()
-                        }
+                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                         placeholder="พิมพ์ข้อความ..."
                         className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:border-blue-500"
                       />
-                      <button
-                        onClick={handleSendMessage}
-                        className=" rounded text-blue-500"
-                      >
+                      <button onClick={handleSendMessage} className=" rounded text-blue-500">
                         <Send size={20} />
                       </button>
                     </div>
@@ -232,7 +241,8 @@ const FloatingChat: React.FC<FloatingChatProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default FloatingChat;
+export default FloatingChat
+

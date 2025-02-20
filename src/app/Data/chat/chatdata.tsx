@@ -71,7 +71,7 @@ export interface User {
   
   export const initialMessages: Message[] = [
     {
-      id: 1,
+      id: 6,
       text: "สวัสดีค่ะ มีอะไรให้ช่วยไหมคะ?",
       sender: "other",
       timestamp: new Date(),
@@ -82,5 +82,5 @@ export interface User {
  export interface FloatingChatProps {
   isVisible: boolean;
   onClose: () => void;
-  selectedDoctor: Doctor;
+  selectedDoctor?: Doctor;
 }
