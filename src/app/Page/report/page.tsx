@@ -67,7 +67,7 @@ const page = () => {
 
 
           <div className="flex space-x-6 text-xs ml-3">
-            {" "}
+            
             {/* เปลี่ยนเป็น flex และใช้ space-x-6 สำหรับระยะห่างแนวนอน */}
             <label className="flex items-center space-x-3 cursor-pointer">
               <div className="relative">

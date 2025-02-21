@@ -131,7 +131,7 @@ const HealthPage = () => {
             <div className="flex mt-8">
               {/* Div สำหรับช่องค้นหา */}
               <div className="flex space-x-4 flex-grow">
-                {" "}
+                
                 {/* Search Input for Name */}
                 <input
                   type="search"

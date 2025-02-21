@@ -265,30 +265,30 @@ const Patient = () => {
                   {/* วนลูปผ่านข้อมูลใน `users` และแสดงผลในแต่ละแถว */}
                   {results.map((user) => (
                     <tr key={user.id} className="hover:bg-gray-100">
-                      {" "}
+                      
                       {/* ใช้ key เป็น `id` และใช้ hover เพื่อเปลี่ยนสีแถว */}
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">
                         {user.id}
-                      </td>{" "}
+                      </td>
                       {/* แสดง ID */}
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">
                         {user.username}
-                      </td>{" "}
+                      </td>
                       {/* แสดง Username */}
                       <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-900 text-center">
                         {user.email}
-                      </td>{" "}
+                      </td>
                       {/* แสดง Email */}
                       <td className="px-6 py-2 text-black text-center text-xs">
                         {user.first_name}
-                      </td>{" "}
+                      </td>
                       {/* แสดง First Name */}
                       <td className="px-6 py-2 text-black text-center text-xs">
                         {user.last_name}
-                      </td>{" "}
+                      </td>
                       {/* แสดง Last Name */}
                       <td className="px-6 py-2 text-black text-center text-xs">
-                        {" "}
+                        
                         {/* แสดง Date Joined โดยใช้ `toLocaleString` เพื่อแสดงเป็นรูปแบบที่อ่านได้ */}
                         {new Date().toLocaleString("en-EN", {
                           timeZone: "Asia/Bangkok",
@@ -299,15 +299,15 @@ const Patient = () => {
                           onClick={() => openEditModal(user)}
                           className="text-blue-600 mr-4 "
                         >
-                          {" "}
-                          Edit{" "}
+                          
+                          Edit
                         </button>
                         <button
                           onClick={() => openDeleteModal(user)}
                           className="text-red-600"
                         >
-                          {" "}
-                          Delete{" "}
+                          
+                          Delete
                         </button>
                       </td>
                     </tr>

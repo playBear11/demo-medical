@@ -206,7 +206,7 @@ const Register = () => {
 
             <div className="mb-4 mt-4 flex justify-center">
               <p className="text-xs font-medium">
-                Not Registered?{" "}
+                Not Registered?
                 <span
                   onClick={handleRegisterClick}
                   className="text-xs text-cyan-900 hover:text-blue-700 focus:outline-none focus:underline transition ease-in-out duration-150 cursor-pointer"

@@ -220,8 +220,8 @@ const HomeWards = () => {
               onClick={handleCloseModal}
               className="mt-10 mr-4 text-red-500 font-semibold float-right"
             >
-              {" "}
-              Close{" "}
+              
+              Close
             </button>
           </Box>
         </Modal>

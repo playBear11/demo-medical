@@ -90,7 +90,7 @@ const Doctors = () => {
                         src={doctor.avatar || "/placeholder.svg"}
                         alt={doctor.name}
                         className="w-16 h-16 rounded-full object-cover"
-                      />{" "}
+                      />
                     </td>
                     <td>{doctor.username}</td>
                     <td>{doctor.name}</td>
@@ -174,8 +174,8 @@ const Doctors = () => {
 
                   <div>
                     <label className="block text-xs text-gray-600 mb-1">
-                      {" "}
-                      Firstname{" "}
+                      
+                      Firstname
                     </label>
                     <input
                       type="text"
@@ -186,8 +186,8 @@ const Doctors = () => {
 
                   <div>
                     <label className="block text-xs text-gray-600 mb-1">
-                      {" "}
-                      Lastname{" "}
+                      
+                      Lastname
                     </label>
                     <input
                       type="text"
@@ -198,8 +198,8 @@ const Doctors = () => {
 
                   <div>
                     <label className="block text-xs text-gray-600 mb-1">
-                      {" "}
-                      Gender{" "}
+                      
+                      Gender
                     </label>
                     <select
                       defaultValue={selectedDoctor.gender}
@@ -212,8 +212,8 @@ const Doctors = () => {
 
                   <div>
                     <label className="block text-xs text-gray-600 mb-1">
-                      {" "}
-                      Hospital{" "}
+                      
+                      Hospital
                     </label>
                     <input
                       type="text"

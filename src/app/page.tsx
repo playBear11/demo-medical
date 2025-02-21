@@ -1,6 +1,6 @@
 "use client"
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 import { Line, Bar } from "react-chartjs-2"
@@ -9,7 +9,22 @@ import { barChartData } from "../app/Data/charts/barChartData"
 import { iconMapping } from "../app/Data/constants/icons"
 import { stats } from "../app/Data/statdash/stats"
 import MainLayout from "./Components/pagecom/mainlayout"
-import Calendar from "./Components/pagecom/calendar"
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+);
 
 const Home = () => {
   const router = useRouter()
@@ -36,14 +51,24 @@ const Home = () => {
     setDropdownOpen(!dropdownOpen)
   }
 
+  const [currentDateTime, setCurrentDateTime] = useState(
+    new Date().toLocaleString()
+  );
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentDateTime(new Date().toLocaleString());
+    }, 1000); // อัปเดตทุกๆ 1 วินาที
+
+    return () => clearInterval(intervalId); // ทำความสะอาด interval เมื่อ component ถูก unmount
+  }, []);
+
   return (
     <MainLayout>
       <div className="flex min-h-screen overflow-auto">
         {/* Main content section */}
-        <div className="w-4/5 p-4">
+        <div className="w-full p-4">
         
-          <div className="mb-10">
-            {/* Gradient Banner */}
             <div className="h-64 bg-gradient-to-r from-indigo-400 via-blue-400 to-sky-300 rounded-2xl mb-5 flex justify-between items-center p-6">
               <div className="text-white">
                 <h1
@@ -52,8 +77,17 @@ const Home = () => {
                 >
                   Good Morning
                 </h1>
-                <p className="text-white px-4 ml-4" style={{ fontFamily: "Dancing Script, cursive" }}>
+                <p
+                  className="text-white  px-4 ml-4"
+                  style={{ fontFamily: "Dancing Script, cursive" }}
+                >
                   Have Your Enjoyed!!
+                </p>
+                <p
+                  className="text-white text-xs px-4 ml-4 mt-3"
+                  style={{ fontFamily: "Dancing Script, cursive" }}
+                >
+                  {currentDateTime}
                 </p>
               </div>
               <img
@@ -135,12 +169,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-
-        {/*ส่วนของปฏิทิน */}
-        <div className="w-1/5 p-4 border-l">
-          <Calendar />
-        </div>
-      </div>
+     
 
       {/* Modal */}
       {isModalOpen && (
@@ -163,4 +192,3 @@ const Home = () => {
 }
 
 export default Home
-
