@@ -47,15 +47,6 @@ const useAuth = () => {
           localStorage.getItem("user_role")
         ); // แสดง Role ใน localStorage
 
-        //console.log("User Role:", userRole);
-
-        {
-          /* ตรวจสอบว่าผู้ใช้ยังไม่ได้ล็อกอินก่อนจะ redirect
-        if (typeof window !== "undefined" && window.location.pathname !== "/") {
-          router.push("/");
-        */
-        }
-
         // Redirect ตาม Role
         if (userRole === "Admin") {
           router.push("/"); // ไปหน้า Admin
