@@ -74,69 +74,57 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
   return (
     <div className="flex h-screen overflow-y-auto">
       {isSidebarOpen && (
-        <aside
-          className={`bg-sky-50 p-4 h-screen transition-all duration-500 ease-in-out ${
-            isHovered ? "w-50" : "w-22"
-          }`}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+        <aside className="bg-sky-50 p-4 h-screen transition-all duration-500 ease-in-out w-50">
           <nav className="flex-1">
             <ul className="space-y-1.5 px-2">
               <hr className="my-2 border-gray-300" />
-              {isHovered && (
-                <div className="text-[9px] font-extrabold text-gray-600 mb-1">
-                  GENERAL
-                </div>
-              )}
+              <div className="text-[9px] font-extrabold text-gray-600 mb-1">
+                GENERAL
+              </div>
               {menuItems.map((item) => (
                 <li key={item.name}>
                   <button
                     onClick={() => handleNavigation(item.href)}
                     className="flex items-center w-full p-2 rounded-lg text-black text-xs hover:bg-white hover:text-blue-600 transition-colors"
                   >
-                    <item.icon className="w-5 h-5" />
-                    {isHovered && <span className="ml-2">{item.name}</span>}
+                    <item.icon className="w-5 h-5 mr-2" />
+                    <span>{item.name}</span>
                   </button>
                 </li>
               ))}
-
+  
               {itemsManage.length > 0 && (
                 <>
                   <hr className="my-2 border-gray-300" />
-                  {isHovered && (
-                    <div className="text-[9px] font-extrabold text-gray-600 mb-1">
-                      MANAGEMENT
-                    </div>
-                  )}
+                  <div className="text-[9px] font-extrabold text-gray-600 mb-1">
+                    MANAGEMENT
+                  </div>
                   {itemsManage.map((item) => (
                     <li key={item.name}>
                       <button
                         onClick={() => handleNavigation(item.href)}
                         className="flex items-center w-full p-2 rounded-lg text-black text-xs hover:bg-white hover:text-blue-600 transition-colors"
                       >
-                        <item.icon className="w-5 h-5" />
-                        {isHovered && <span className="ml-2">{item.name}</span>}
+                        <item.icon className="w-5 h-5 mr-2" />
+                        <span>{item.name}</span>
                       </button>
                     </li>
                   ))}
                 </>
               )}
-
+  
               <hr className="my-2 border-gray-300" />
-              {isHovered && (
-                <div className="text-[9px] font-extrabold text-gray-600 mb-1">
-                  REPORT
-                </div>
-              )}
+              <div className="text-[9px] font-extrabold text-gray-600 mb-1">
+                REPORT
+              </div>
               {report.map((item) => (
                 <li key={item.name}>
                   <button
                     onClick={() => handleNavigation(item.href)}
                     className="flex items-center w-full p-2 rounded-lg text-black text-xs hover:bg-white hover:text-blue-600 transition-colors"
                   >
-                    <item.icon className="w-5 h-5" />
-                    {isHovered && <span className="ml-2">{item.name}</span>}
+                    <item.icon className="w-5 h-5 mr-2" />
+                    <span>{item.name}</span>
                   </button>
                 </li>
               ))}
@@ -146,6 +134,6 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
       )}
     </div>
   );
-};
+};  
 
 export default Menu;

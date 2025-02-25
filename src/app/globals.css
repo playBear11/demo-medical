@@ -1,7 +1,15 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
+@font-face {
+  font-family: "Penguin";
+  src: url("/fonts/Penguin.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+:root {
+  --font-penguin: "Penguin", sans-serif;
+}
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -33,4 +41,7 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f5f9; /* สีพื้นหลัง */
+}
+body {
+  font-family: "Penguin", "Sarabun", sans-serif;
 }
