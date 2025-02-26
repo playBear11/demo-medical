@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        penguin: ["Penguin", "sans-serif"], // กำหนดฟอนต์
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

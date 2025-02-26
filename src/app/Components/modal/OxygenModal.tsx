@@ -13,11 +13,11 @@ const OxygenModal: React.FC<OxygenModalProps> = ({ isOpen, onClose }) => {
   const getStatusClass = (status: string) => {
     switch (status) {
       case "ฉุกเฉิน":
-        return "text-red-500"; // Red color for "ฉุกเฉิน"
+        return "bg-red-100 text-red-800 font-semibold";
       case "สุ่มเสี่ยง":
-        return "text-yellow-500"; // Yellow color for "สุ่มเสี่ยง"
+        return "bg-yellow-100 text-yellow-800 font-semibold";
       case "ปกติ":
-        return "text-green-500"; // Green color for "ปกติ"
+        return "bg-green-100 text-green-800 font-semibold";
       default:
         return "text-gray-500"; // Default color if status is unknown
     }

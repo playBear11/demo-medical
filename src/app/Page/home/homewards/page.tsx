@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { Card, Modal, Box } from "@mui/material";
 import Nav from "@/app/Components/pagecom/nav";
 import Menu from "@/app/Components/pagecom/menu";
-
+import axios from "axios";
 import HealthData from "@/app/Components/modal/SymptomModal";
 import TemperatureModal from "@/app/Components/modal/TemperatureModal";
 import BloodSugarModal from "@/app/Components/modal/BloodSugarModal";
@@ -16,6 +16,8 @@ import { tabs } from "@/app/Data/tab/tab-data";
 import { medicalData } from "@/app/Data/medical/medical-data"; // ✅ นำเข้าข้อมูลค่าทางการแพทย์
 
 const HomeWards = () => {
+  
+  
   const [dataTabs, setDataTabs] = useState("all");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,8 +28,8 @@ const HomeWards = () => {
     value: string;
     details: string;
   } | null>(null);
-
   const [openModal, setOpenModal] = useState<string | null>(null);
+
 
   const handleModalToggle = (modalName: string) => {
     setOpenModal(openModal === modalName ? null : modalName);
@@ -70,7 +72,7 @@ const HomeWards = () => {
       case "Temperature":
         setOpenModal("temperature");
         break;
-      case "Blood Sugar":
+      case "Blood Glucose":
         setOpenModal("bloodSugar");
         break;
       case "Heart Rate":

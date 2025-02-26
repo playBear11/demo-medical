@@ -63,6 +63,8 @@ const Home = () => {
     return () => clearInterval(intervalId); // ทำความสะอาด interval เมื่อ component ถูก unmount
   }, []);
 
+  
+
   return (
     <MainLayout>
       <div className="flex min-h-screen overflow-auto">
@@ -97,70 +99,107 @@ const Home = () => {
               />
             </div>
 
-            {/* Updated Statistics Section with correct icon rendering */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              {stats.map((stat, index) => {
-                const Icon = iconMapping[stat.icon as keyof typeof iconMapping]
-                return (
-                  <div
-                    key={index}
-                    className="p-2 shadow-md rounded-lg border bg-white flex flex-col justify-between h-full"
-                  >
-                    <div className="flex items-center m-2 h-20">
-                      {Icon && <Icon className={`${stat.iconColor} w-6 h-6 mr-2`} />}
-                      <div className="flex flex-col w-full">
-                        <h3 className="text-base mt-3 font-semibold text-black">{stat.title}</h3>
-                        <p className="text-xs text-blue-400 mt-1">
-                          {Array.isArray(stat.value)
-                            ? stat.value.map((department, index) => (
-                                <span key={index}>
-                                  {department.department}: {department.patients} patients
-                                  <br />
-                                </span>
-                              ))
-                            : typeof stat.value === "object"
-                              ? Object.entries(stat.value).map(([key, val]) => (
-                                  <span key={key}>
-                                    {key}: {val}
-                                    <br />
-                                  </span>
-                                ))
-                              : stat.value}
-                        </p>
-                        <p className={`text-xs ${stat.change?.startsWith("+") ? "text-green-500" : "text-red-500"}`}>
-                          {stat.change}
-                        </p>
-                        <button
-                          className="mt-2 text-xs mx-1 text-blue-500 hover:underline ml-auto"
-                          onClick={() => openModal(<div>{stat.description}</div>)}
-                        >
-                          View Details
-                        </button>
-                      </div>
+            {/* Statistics Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {stats.map((stat, index) => {
+              const Icon = iconMapping[stat.icon as keyof typeof iconMapping]
+              return (
+                <div
+                  key={index}
+                  className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="flex items-center mb-2">
+                    <div className={`p-2 rounded-lg ${stat.iconColor.includes('text-blue') ? 'bg-blue-100' : stat.iconColor.includes('text-green') ? 'bg-green-100' : 'bg-gray-100'}`}>
+                      {Icon && <Icon className={`${stat.iconColor} w-5 h-5`} />}
                     </div>
+                    <h3 className="text-base font-medium text-gray-800 ml-3">{stat.title}</h3>
                   </div>
-                )
-              })}
-            </div>
+                  
+                  <div className="mt-2 text-sm text-gray-600">
+                    {Array.isArray(stat.value) ? (
+                      stat.value.map((department, index) => (
+                        <div key={index} className="flex justify-between mb-1">
+                          <span>{department.department}:</span>
+                          <span className="font-medium">{department.patients} patients</span>
+                        </div>
+                      ))
+                    ) : typeof stat.value === "object" ? (
+                      Object.entries(stat.value).map(([key, val]) => (
+                        <div key={key} className="flex justify-between mb-1">
+                          <span>{key}:</span>
+                          <span className="font-medium">{val}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-lg font-semibold text-gray-800 my-2">
+                        {stat.value}
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div className="flex justify-between items-center mt-3 pt-2 border-t border-gray-100">
+                    <p className={`text-xs ${stat.change?.startsWith("+") ? "text-green-500" : "text-red-500"} font-medium`}>
+                      {stat.change}
+                    </p>
+                    <button
+                      className="text-xs text-blue-500 hover:text-blue-700 font-medium hover:underline"
+                      onClick={() => openModal(<div>{stat.description}</div>)}
+                    >
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
 
-            {/* Charts Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="bg-white p-6 shadow-md rounded-lg border-2">
-                <h3 className="text-lg text-black font-semibold mb-4">Patients per Month</h3>
-                <Line data={lineChartData} /> {/* แสดงกราฟ Line */}
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="bg-white p-5 shadow-sm rounded-xl border border-gray-100">
+              <h3 className="text-lg font-medium text-gray-800 mb-4 pb-2 border-b border-gray-100">Patients per Month</h3>
+              <div className="h-64">
+                <Line 
+                  data={lineChartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        position: 'bottom',
+                      }
+                    }
+                  }}
+                />
+              </div>
+              <div className="mt-4 text-right">
                 <button
-                  className="mt-4 text-blue-500 hover:underline text-end w-full"
-                  onClick={() => openModal(<Line data={lineChartData} />)} //เปิด Modal เพื่อดูกราฟเต็ม
+                  className="text-sm text-blue-500 hover:text-blue-700 font-medium hover:underline"
+                  onClick={() => openModal(<Line data={lineChartData} />)}
                 >
                   View Full Chart
                 </button>
               </div>
+            </div>
 
-              <div className="bg-white p-6 shadow-md rounded-lg border-2">
-                <h3 className="text-lg text-black font-semibold mb-4">Daily Appointments</h3>
-                <Bar data={barChartData} />
+            <div className="bg-white p-5 shadow-sm rounded-xl border border-gray-100">
+              <h3 className="text-lg font-medium text-gray-800 mb-4 pb-2 border-b border-gray-100">Daily Appointments</h3>
+              <div className="h-64">
+                <Bar 
+                  data={barChartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        position: 'bottom',
+                      }
+                    }
+                  }}
+                />
+              </div>
+              <div className="mt-4 text-right">
                 <button
-                  className="mt-4 text-blue-500 hover:underline text-end w-full "
+                  className="text-sm text-blue-500 hover:text-blue-700 font-medium hover:underline"
                   onClick={() => openModal(<Bar data={barChartData} />)}
                 >
                   View Full Chart
@@ -169,16 +208,16 @@ const Home = () => {
             </div>
           </div>
         </div>
-     
+      </div>
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg max-w-2xl w-full max-h-[80vh] overflow-auto">
             {modalContent}
-            <div className="mt-6 flex justify-end space-x-4">
+            <div className="mt-6 flex justify-end">
               <button
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400"
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                 onClick={() => setIsModalOpen(false)}
               >
                 Close
