@@ -34,3 +34,6 @@ body {
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f5f9; /* สีพื้นหลัง */
 }
+body {
+  font-family: "Penguin", "Sarabun", sans-serif;
+}

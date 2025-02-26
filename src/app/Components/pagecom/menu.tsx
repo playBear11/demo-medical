@@ -134,6 +134,6 @@ const Menu: React.FC<MenuProps> = ({ isSidebarOpen }) => {
       )}
     </div>
   );
-};
+};  
 
 export default Menu;

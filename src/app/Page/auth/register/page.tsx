@@ -22,10 +22,10 @@ const Register = () => {
 
 
     validationSchema: Yup.object({
-      username: Yup.string().required("Username is required"),
-      password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+      username: Yup.string().required("Username is required"),  //ต้องใส่ยูสเส้อ
+      password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),   //ใส่รหัสอย่างน้อย 6 ตัว
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), undefined], "Passwords must match")
+        .oneOf([Yup.ref("password"), undefined], "Passwords must match") //เช็ครหัสตรงกันไหม
         .required("Confirm password is required"),
     }),
 

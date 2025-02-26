@@ -37,7 +37,7 @@ const ChangePasswordPage = () => {
         }
 
         await axios.put(
-          "http://192.168.1.94:8005/auths/change-password/",
+          `${process.env.NEXT_PUBLIC_API_URL}/auths/change-password/`,
           values,
           {
             headers: {
