@@ -1,15 +1,7 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-@font-face {
-  font-family: "Penguin";
-  src: url("/fonts/Penguin.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-:root {
-  --font-penguin: "Penguin", sans-serif;
-}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

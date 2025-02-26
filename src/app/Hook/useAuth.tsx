@@ -13,6 +13,26 @@ const useAuth = () => {
     localStorage.getItem("user_role")
   ); // ตั้งค่าเริ่มต้นจาก localStorage
 
+
+const refreshaccesstoken = async () => {
+  try {
+const refreshToken = localStorage.getItem("refresh_token");
+    if  (!refreshToken) throw new Error ("No refresh token available");
+    const red = await axios.post("http://localhost:8000/api/token/refresh/",{
+      refreshToken,
+    });
+    
+    if (red.status === 200) {
+      localStorage.setItem("access_token", red.data.accessToken);
+      return red.data.accessToken;
+    }
+  } catch (err) {
+    console.error("Refresh Token Error:", err);
+    logout();
+  }
+  return null;
+};
+
   const login = async (username: string, password: string) => {
     setLoading(true);
     setError(null);
@@ -47,14 +67,6 @@ const useAuth = () => {
           localStorage.getItem("user_role")
         ); // แสดง Role ใน localStorage
 
-        //console.log("User Role:", userRole);
-
-        {
-          /* ตรวจสอบว่าผู้ใช้ยังไม่ได้ล็อกอินก่อนจะ redirect
-        if (typeof window !== "undefined" && window.location.pathname !== "/") {
-          router.push("/");
-        */
-        }
 
         // Redirect ตาม Role
         if (userRole === "Admin") {
@@ -88,3 +100,7 @@ const useAuth = () => {
 };
 
 export default useAuth;
+
+function logout() {
+  throw new Error("Function not implemented.");
+}

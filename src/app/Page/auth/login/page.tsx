@@ -21,7 +21,7 @@ const Login = () => {
       rememberMe: false,
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("is required"),
+      username: Yup.string().required("is required"),     //ต้องใส่
       password: Yup.string()
         .min(3, "Password must be at least 3 characters")
         .required("is required"),
@@ -32,7 +32,7 @@ const Login = () => {
     },
   });
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);  //เปิด-ปิด รหัสผ่าน
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
