@@ -26,7 +26,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
     const checkAuth = async () => {
       try {
-        const resMyuser = await axios.get("http://192.168.1.94:8005/auths/users/me/");
+        const resMyuser = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auths/users/me/`);
         console.log('resMyuser', resMyuser);
 
         if (resMyuser.data) {

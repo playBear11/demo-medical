@@ -22,7 +22,7 @@ const PatientTable = () => {
       try {
         const token = localStorage.getItem("access_token"); // หรือที่คุณเก็บ token ไว้
         const response = await axios.get(
-          "http://192.168.1.94:8005/auths/persons/",
+          `${process.env.NEXT_PUBLIC_API_URL}/auths/persons/`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // 🔹 เพิ่ม Token ใน Header

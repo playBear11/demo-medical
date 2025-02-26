@@ -38,7 +38,7 @@ const refreshToken = localStorage.getItem("refresh_token");
     setError(null);
 
     try {
-      const res = await axios.post("http://192.168.1.94:8005/auths/login/", {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auths/login/`, {
         username,
         password,
       });
@@ -52,7 +52,7 @@ const refreshToken = localStorage.getItem("refresh_token");
 
         // เรียก API GET /auths/users/me/ เพื่อตรวจสอบ role
         const userRes = await axios.get(
-          "http://192.168.1.94:8005/auths/users/me/",
+          `${process.env.NEXT_PUBLIC_API_URL}/auths/users/me/`,
           {
             headers: { Authorization: `Bearer ${res.data.accessToken}` },
           }
